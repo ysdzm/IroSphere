@@ -94,6 +94,34 @@ namespace IroSphere
 		[SerializeField]
 		Text AdditiveNumText;
 
+		[SerializeField]
+		GameObject infoObjText;
+		[SerializeField]
+		GameObject infoObjTextRGB;
+		[SerializeField]
+		GameObject infoObjBG;
+		[SerializeField]
+		GameObject infoObjR;
+		[SerializeField]
+		GameObject infoObjG;
+		[SerializeField]
+		GameObject infoObjB;
+
+		RectTransform infoTextRect;
+		Text infoText;
+		RectTransform infoTextRectRGB;
+		Text infoTextRGB;
+		RectTransform infoRectBG;
+		Image infoImageBG;
+		RectTransform infoRectR;
+		Image infoImageR;
+		RectTransform infoRectG;
+		Image infoImageG;
+		RectTransform infoRectB;
+		Image infoImageB;
+
+
+
 		//2つ目の球の配置座標
 		float secondarySpherePosition = 2.25f;
 		//プレビュースフィアの透過率
@@ -120,6 +148,15 @@ namespace IroSphere
 
 		Vector3 pastMousePos;
 
+		//インフォメーション系の情報
+		bool enableInfo = false;
+		bool pastEnableInfo = false;
+		Vector2 offsetInfoR = new Vector2(130.0f, 195.0f);
+		Vector2 offsetInfoG = new Vector2(130.0f, 162.0f);
+		Vector2 offsetInfoB = new Vector2(130.0f, 130.0f);
+		float infoBarSize = 230.0f;
+
+
 		private void OnValidate()
 		{
 
@@ -141,19 +178,33 @@ namespace IroSphere
 			spheres[currentSphereID].CreatePreviewNode();
 
 			rotate = Vector2.up * -30.0f;
+
+			infoTextRect = infoObjText.GetComponent<RectTransform>();
+			infoText = infoObjText.GetComponent<Text>();
+			infoTextRectRGB = infoObjTextRGB.GetComponent<RectTransform>();
+			infoTextRGB = infoObjTextRGB.GetComponent<Text>();
+			infoRectBG = infoObjBG.GetComponent<RectTransform>();
+			infoImageBG = infoObjBG.GetComponent<Image>();
+			infoRectR = infoObjR.GetComponent<RectTransform>();
+			infoImageR = infoObjR.GetComponent<Image>();
+			infoRectG = infoObjG.GetComponent<RectTransform>();
+			infoImageG = infoObjG.GetComponent<Image>();
+			infoRectB = infoObjB.GetComponent<RectTransform>();
+			infoImageB = infoObjB.GetComponent<Image>();
+
 		}
 
 
 		void Update()
 		{
-			/*
+			
 			//一個でもNULLが含まれていたら終了
 			foreach (Sphere s in spheres)
 			{
 				if (s == null)
 					return;
 			}
-			*/
+			
 
 			//クリックしたら球作成
 			if (InputMouseButton() && getColor.isInImageRect)
@@ -178,6 +229,7 @@ namespace IroSphere
 			UpdateAdditiveNumText();
 			Save();
 			Load();
+			EnableInfomation();
 		}
 
 		public bool CreateAdditiveNode()
@@ -492,5 +544,63 @@ namespace IroSphere
 					return;
 			}
 		}
+
+		void EnableInfomation()
+		{
+			if (Input.GetButtonDown("Information"))
+				enableInfo = !enableInfo;
+		}
+
+
+
+
+		public void UpdateInformation(bool isInImageRect, Vector2 mousePos, Color color,Vector2 onImagePosRatio)
+		{
+			if (enableInfo && !pastEnableInfo)
+			{
+				infoImageR.enabled = true;
+				infoImageG.enabled = true;
+				infoImageB.enabled = true;
+				infoText.enabled = true;
+				infoTextRGB.enabled = true;
+				infoImageBG.enabled = true;
+			}
+			else if(!enableInfo && pastEnableInfo)
+			{
+				infoImageR.enabled = false;
+				infoImageG.enabled = false;
+				infoImageB.enabled = false;
+				infoText.enabled = false;
+				infoTextRGB.enabled = false;
+				infoImageBG.enabled = false;
+			}
+			pastEnableInfo = enableInfo;
+
+			if (!enableInfo)
+				return;
+
+			infoRectBG.position = mousePos;
+			infoTextRectRGB.position = mousePos;
+			infoTextRect.position = mousePos;
+			infoRectR.position = mousePos + offsetInfoR;
+			infoRectG.position = mousePos + offsetInfoG;
+			infoRectB.position = mousePos + offsetInfoB;
+
+			infoRectR.sizeDelta = new Vector2(color.r * infoBarSize, 5.0f);
+			infoRectG.sizeDelta = new Vector2(color.g * infoBarSize, 5.0f);
+			infoRectB.sizeDelta = new Vector2(color.b * infoBarSize, 5.0f);
+
+			infoTextRGB.text = (int)(color.r * 255) + "\n";
+			infoTextRGB.text += (int)(color.g * 255) + "\n";
+			infoTextRGB.text += (int)(color.b * 255) + "\n";
+			infoText.text = "POS : ( " + ((int)(onImagePosRatio.x * picture.rect.width)).ToString() + " , " + 
+				((int)(onImagePosRatio.y * picture.rect.height)).ToString() + " )\n";
+			HSL hsl = HSL.RGBToHSL(color);
+			infoText.text += "HSL : ( " + hsl.h.ToString("f2") + " , " + hsl.s.ToString("f2") + " , " + hsl.l.ToString("f2") + " )\n";
+
+
+
+		}
+
 	}
 }

@@ -52,11 +52,22 @@ namespace IroSphere
 							 mousePos.y >= imageCornerBottomLeft.y && imageCornerTopRight.y >= mousePos.y &&
 							 image.enabled);
 
+			//マウスポインタの画像上での位置比率
+			Vector2 onImagePosRatio;
+			if (isInImageRect)
+			{
+				onImagePosRatio = new Vector2(
+				(mousePos.x - imageCornerBottomLeft.x) / (imageCornerTopRight.x - imageCornerBottomLeft.x),
+				(mousePos.y - imageCornerBottomLeft.y) / (imageCornerTopRight.y - imageCornerBottomLeft.y));
+			}
+			else
+			{
+				onImagePosRatio = Vector2.zero;
+			}
 
-
-			Color color = isInImageRect ? ReadPixels(mousePos) : Color.white;
+			Color color = isInImageRect ? ReadPixels(mousePos) : Color.black;
 			sphereManager.UpdatePreviewNode(color, isInImageRect);
-
+			sphereManager.UpdateInformation(isInImageRect, mousePos, color, onImagePosRatio);
 		}
 
 			private void Update()
