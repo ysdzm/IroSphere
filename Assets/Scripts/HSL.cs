@@ -198,7 +198,8 @@ namespace IroSphere
 
 			bool FloatEqual(float a, float b)
 			{
-				return MathF.Abs(a - b) <= float.Epsilon;
+				//1/256した値以下は誤差として切り捨て
+				return MathF.Abs(a - b) <= 0.004f;
 			}
 		}
 	}
