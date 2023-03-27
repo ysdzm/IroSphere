@@ -421,7 +421,7 @@ namespace IroSphere
 		/// </summary>
 		void ScaleSphere()
 		{
-			scale += Input.GetAxis("Scale") * scaleSpeed * Time.deltaTime;
+			scale += (Input.GetAxis("Scale")+Input.mouseScrollDelta.y*10.0f) * scaleSpeed * Time.deltaTime;
 
 			scale = Mathf.Clamp(scale, 0.1f, 10.0f);
 
