@@ -79,6 +79,9 @@ public class Sphere
 		var primitiveType = shapeType == ShapeType.SPHERE ? PrimitiveType.Sphere : PrimitiveType.Cube;
 		GameObject nodeObj = GameObject.CreatePrimitive(primitiveType);
 
+		GameObject.Destroy(nodeObj.GetComponent<Collider>());
+		
+
 		nodeObj.GetComponent<MeshRenderer>().material = material;
 		HSL hsl = HSL.PositionToHSL(position);
 		Color color = hsl.ToRgb();

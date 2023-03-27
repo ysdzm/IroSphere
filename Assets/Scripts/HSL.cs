@@ -140,7 +140,7 @@ namespace IroSphere
 			{
 				return ((a - h) / 0.1666f) * (max - min) + min;
 			}
-
+			
 		}
 
 		/// <summary>
