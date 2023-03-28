@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using UnityEditor;
 using UnityEngine;
@@ -45,11 +46,11 @@ namespace IroSphere
 		int initNodeNumL = 15;
 		[SerializeField, Range(0.0f, 1.0f), Tooltip("中心方向に行くに従って小さくするかどうか")]
 		float initNodeCenterSmall = 1;
-		[SerializeField, Tooltip("初期配置ノードのサイズ")]
+		[SerializeField, Range(0.01f, 1.0f), Tooltip("初期配置ノードのサイズ")]
 		float initNodeSize = 0.02f;
 
 		[Header("プレビュー用のノードのパラメーター")]
-		[SerializeField, Tooltip("マウスカーソルあてた時のノードのサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
+		[SerializeField, Range(0.01f, 1.0f), Tooltip("マウスカーソルあてた時のノードのサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
 		float previewNodeSize = 0.4f;
 		public float PreviewNodeSize => previewNodeSize;
 
@@ -57,7 +58,7 @@ namespace IroSphere
 
 		[Header("クリックで追加するノードのパラメーター")]
 
-		[SerializeField, Tooltip("クリックして置ける球のサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
+		[SerializeField, Range(0.01f, 1.0f), Tooltip("クリックして置ける球のサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
 		float additiveNodeSize = 0.2f;
 		public float AdditiveNodeSize => additiveNodeSize;
 
@@ -156,26 +157,23 @@ namespace IroSphere
 		Vector2 offsetInfoB = new Vector2(130.0f, 130.0f);
 		float infoBarSize = 230.0f;
 
+		//過去のノードサイズ
+		float pastPreviewNodeSize;
+		float pastInitNodeSize;
+		float pastAdditiveNodeSize;
+
 		ShapeType pastShapeType;
+
+
+
 
 		private void OnValidate()
 		{
 			if (!EditorApplication.isPlaying)
 				return;
 
-			foreach(Sphere s in spheres)
-			{
-				if (s == null)
-					continue;
-				s.SetAllAdditiveNodeSize(AdditiveNodeSize);
-			}
-
+			ChangeNodeSize();
 			SetImageSize();
-
-
-
-
-
 		}
 
 		private void Start()
@@ -198,6 +196,10 @@ namespace IroSphere
 			infoImageG = infoObjG.GetComponent<Image>();
 			infoRectB = infoObjB.GetComponent<RectTransform>();
 			infoImageB = infoObjB.GetComponent<Image>();
+
+			pastPreviewNodeSize = previewNodeSize;
+			pastInitNodeSize = initNodeSize;
+			pastAdditiveNodeSize = additiveNodeSize;
 
 			pastShapeType = shapeType;
 
@@ -541,6 +543,51 @@ namespace IroSphere
 
 			pastShapeType = shapeType;
 		}
+
+		/// <summary>
+		/// 実行中のノードサイズ変更
+		/// </summary>
+		void ChangeNodeSize()
+		{
+			if(!Utility.IsEqual(initNodeSize,pastInitNodeSize))
+			{
+				for(int i = 0; i < spheres.Length;i++)
+				{
+					if (spheres[i] == null)
+						continue;
+					spheres[i].ChangeNodeSize(NodeType.INIT, initNodeSize);
+				}
+			}
+
+			if (!Utility.IsEqual(previewNodeSize, pastPreviewNodeSize))
+			{
+				for (int i = 0; i < spheres.Length; i++)
+				{
+					if (spheres[i] == null)
+						continue;
+					spheres[i].ChangeNodeSize(NodeType.PREVIEW, previewNodeSize);
+				}
+			}
+
+			if (!Utility.IsEqual(additiveNodeSize, pastAdditiveNodeSize))
+			{
+				for (int i = 0; i < spheres.Length; i++)
+				{
+					if (spheres[i] == null)
+						continue;
+					spheres[i].ChangeNodeSize(NodeType.ADDITIVE, additiveNodeSize);
+				}
+			}
+
+			pastInitNodeSize = initNodeSize;
+			pastPreviewNodeSize = previewNodeSize;
+			pastAdditiveNodeSize = additiveNodeSize;
+
+		}
+
+
+
+
 
 
 		/// <summary>

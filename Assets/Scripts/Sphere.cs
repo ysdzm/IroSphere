@@ -220,15 +220,38 @@ namespace IroSphere
 			AdditiveNodes.Clear();
 		}
 
-
-		public void SetAllAdditiveNodeSize(float size)
+		/// <summary>
+		/// 実行中のノードサイズ変更
+		/// </summary>
+		public void ChangeNodeSize(NodeType nodeType, float size)
 		{
-			if (AdditiveNodes == null || AdditiveNodes.Count == 0)
-				return;
-
-			for (int i = 0; i < AdditiveNodes.Count; i++)
+			switch (nodeType)
 			{
-				AdditiveNodes[i].transform.localScale = Vector3.one * size;
+				case NodeType.ADDITIVE:
+					if (AdditiveNodes == null || AdditiveNodes.Count == 0)
+						return;
+
+					for (int i = 0; i < AdditiveNodes.Count; i++)
+					{
+						AdditiveNodes[i].transform.localScale = Vector3.one * size;
+					}
+					break;
+
+				case NodeType.INIT:
+					if (InitNodes == null || InitNodes.Count == 0)
+						return;
+
+					for (int i = 0; i < InitNodes.Count; i++)
+					{
+						InitNodes[i].transform.localScale = Vector3.one * size;
+					}
+					break;
+
+				case NodeType.PREVIEW:
+					if (PreviewNode == null)
+						return;
+					PreviewNode.transform.localScale = Vector3.one * size;
+					break;
 			}
 		}
 		public void ShowGrid()

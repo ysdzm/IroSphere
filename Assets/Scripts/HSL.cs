@@ -157,18 +157,18 @@ namespace IroSphere
 
 			hsl.l = (max + min) * 0.5f;
 
-			if (FloatEqual(max, min))
+			if (Utility.IsEqual(max, min))
 			{
 				hsl.h = 0.0f;
 				hsl.s = 0.0f;
 			}
 			else
 			{
-				if (FloatEqual(max, color.r))
+				if (Utility.IsEqual(max, color.r))
 				{
 					hsl.h = 0.1666f * ((color.g - color.b) / (max - min));
 				}
-				else if (FloatEqual(max, color.g))
+				else if (Utility.IsEqual(max, color.g))
 				{
 					hsl.h = 0.1666f * ((color.b - color.r) / (max - min)) + 0.3333f;
 				}
@@ -196,11 +196,6 @@ namespace IroSphere
 
 			return hsl;
 
-			bool FloatEqual(float a, float b)
-			{
-				//1/256した値以下は誤差として切り捨て
-				return MathF.Abs(a - b) <= 0.004f;
-			}
 		}
 	}
 }
