@@ -9,260 +9,281 @@ using UnityEngine.UIElements;
 using static IroSphere.SphereManager;
 using System.IO;
 
-public class Sphere
+namespace IroSphere
 {
-	public GameObject Root { get; private set; }
-	public GameObject initNodesParent { get; private set; }
-	public GameObject additiveNodesParent { get; private set; }
 
-	SphereManager manager;
-
-	public Vector3 moveTargetPos { get; set; }
-	Vector3 velocity;
-
-	float SeparateMoveSpeed = 0.2f;
-
-	public List<GameObject> InitNodes { get; private set; } = new List<GameObject>();
-	public List<GameObject> AdditiveNodes { get; private set; } = new List<GameObject>();
-
-	GameObject PreviewNode;
-	Material previewMaterial;
-	GameObject grid;
-
-	public Sphere(Transform parent, int i, SphereManager sphereManager)
+	public class Sphere
 	{
-		i++;
-		this.manager = sphereManager;
-		this.Root = new GameObject("Sphere" + i);
-		this.Root.transform.parent = parent;
-		this.Root.transform.localPosition = Vector3.zero;
-		this.Root.transform.localRotation = Quaternion.identity; //Quaternion.AngleAxis(30.0f, Vector3.right);
-		this.Root.transform.localScale = Vector3.one;
+		public GameObject Root { get; private set; }
+		public GameObject initNodesParent { get; private set; }
+		public GameObject additiveNodesParent { get; private set; }
 
-		initNodesParent = new GameObject("InitNodes" + i);
-		initNodesParent.transform.parent = this.Root.transform;
-		initNodesParent.transform.localPosition = Vector3.zero;
-		initNodesParent.transform.localRotation = Quaternion.identity;
-		initNodesParent.transform.localScale = Vector3.one;
+		SphereManager manager;
 
-		additiveNodesParent = new GameObject("AdditiveNodes" + i);
-		additiveNodesParent.transform.parent = this.Root.transform;
-		additiveNodesParent.transform.localPosition = Vector3.zero;
-		additiveNodesParent.transform.localRotation = Quaternion.identity;
-		additiveNodesParent.transform.localScale = Vector3.one;
-		this.manager = sphereManager;
+		public Vector3 moveTargetPos { get; set; }
+		Vector3 velocity;
 
-		grid = GameObject.Instantiate(sphereManager.Grid, Root.transform);
-		grid.SetActive(true);
-	}
-	public void SetRotation(Quaternion rotation)
-	{
-		Root.transform.localRotation = rotation;
-	}
+		float SeparateMoveSpeed = 0.2f;
 
-	public void UpdateMove()
-	{
-		Root.transform.localPosition = Vector3.SmoothDamp(Root.transform.localPosition, moveTargetPos, ref velocity, SeparateMoveSpeed, float.MaxValue, Time.deltaTime);
-	}
+		public List<GameObject> InitNodes { get; private set; } = new List<GameObject>();
+		public List<GameObject> AdditiveNodes { get; private set; } = new List<GameObject>();
 
+		GameObject PreviewNode;
+		Material previewMaterial;
+		GameObject grid;
 
-
-	/// <summary>
-	/// ノードの作成
-	/// </summary>
-	/// <param name="position"></param>
-	/// <param name="size"></param>
-	/// <param name="nodeType"></param>
-	/// <returns></returns>
-	public GameObject CreateNode(Vector3 position, float size, NodeType nodeType, ShapeType shapeType, Material material)
-	{
-		var primitiveType = shapeType == ShapeType.SPHERE ? PrimitiveType.Sphere : PrimitiveType.Cube;
-		GameObject nodeObj = GameObject.CreatePrimitive(primitiveType);
-
-		GameObject.Destroy(nodeObj.GetComponent<Collider>());
-		
-
-		nodeObj.GetComponent<MeshRenderer>().material = material;
-		HSL hsl = HSL.PositionToHSL(position);
-		Color color = hsl.ToRgb();
-
-		var m = nodeObj.GetComponent<MeshRenderer>().material;
-		m.color = color;
-
-		switch (nodeType)
+		public Sphere(Transform parent, int i, SphereManager sphereManager)
 		{
-			case NodeType.INIT:
-				nodeObj.name = "Init" + nodeObj.name;
-				nodeObj.transform.parent = initNodesParent.transform;
-				InitNodes.Add(nodeObj);
-				break;
-			case NodeType.ADDITIVE:
-				nodeObj.name = "Additive" + nodeObj.name;
-				nodeObj.transform.parent = additiveNodesParent.transform;
-				AdditiveNodes.Add(nodeObj);
-				break;
-			case NodeType.PREVIEW:
-				nodeObj.name = "Preview" + nodeObj.name;
-				nodeObj.transform.parent = Root.transform;
-				PreviewNode = nodeObj;
-				break;
+			i++;
+			this.manager = sphereManager;
+			this.Root = new GameObject("Sphere" + i);
+			this.Root.transform.parent = parent;
+			this.Root.transform.localPosition = Vector3.zero;
+			this.Root.transform.localRotation = Quaternion.identity; //Quaternion.AngleAxis(30.0f, Vector3.right);
+			this.Root.transform.localScale = Vector3.one;
+
+			initNodesParent = new GameObject("InitNodes" + i);
+			initNodesParent.transform.parent = this.Root.transform;
+			initNodesParent.transform.localPosition = Vector3.zero;
+			initNodesParent.transform.localRotation = Quaternion.identity;
+			initNodesParent.transform.localScale = Vector3.one;
+
+			additiveNodesParent = new GameObject("AdditiveNodes" + i);
+			additiveNodesParent.transform.parent = this.Root.transform;
+			additiveNodesParent.transform.localPosition = Vector3.zero;
+			additiveNodesParent.transform.localRotation = Quaternion.identity;
+			additiveNodesParent.transform.localScale = Vector3.one;
+			this.manager = sphereManager;
+
+			grid = GameObject.Instantiate(sphereManager.Grid, Root.transform);
+			grid.SetActive(true);
+		}
+		public void SetRotation(Quaternion rotation)
+		{
+			Root.transform.localRotation = rotation;
 		}
 
-		nodeObj.transform.localPosition = position;
-
-		nodeObj.transform.localRotation = PositionToRotation(position);
-		nodeObj.transform.localScale = Vector3.one * size;
-
-
-		return nodeObj;
-	}
-
-	public void CreatePreviewNode()
-	{
-		//球を作った瞬間見えちゃうので、一旦カメラの後ろに隠した位置に生成しています
-		Transform cameraTrs = Camera.main.transform;
-		GameObject obj = CreateNode(cameraTrs.position - cameraTrs.forward, manager.PreviewNodeSize, NodeType.PREVIEW, manager.PreviewNodeShapeType, manager.PreviewMaterial);
-		previewMaterial = obj.GetComponent<Renderer>().material;
-	}
-
-	Quaternion PositionToRotation(Vector3 position)
-	{
-		//回転決定。中心縦軸はLookRotation出来ないので除外
-		Vector3 p = position;
-		p.y = 0.0f;
-		if (p.sqrMagnitude > float.Epsilon)
-			return Quaternion.LookRotation(Vector3.zero - position, Vector3.up);
-		return Quaternion.identity;
-	}
-
-	/// <summary>
-	/// 追加するノード作成
-	/// </summary>
-	/// <returns>ノード作成成功したかどうか</returns>
-	public bool CreateAdditiveNode()
-	{
-		if (manager.MaxAdditiveNodeNum <= AdditiveNodes.Count)
-			return false;
-		CreateNode(PreviewNode.transform.localPosition, manager.AdditiveNodeSize, NodeType.ADDITIVE, manager.AdditiveShapeType,manager.Material);
-		return true;
-	}
-
-	/// <summary>
-	/// プレビューノード更新
-	/// </summary>
-	/// <param name="color"></param>
-	/// <param name="isInImage"></param>
-	public void UpdatePreviewNode(Color color, bool isInImage)
-	{
-
-		if (!isInImage)
+		public void UpdateMove()
 		{
-			//画像の外にマウスカーソルがある時は、サイズを0にして隠す
-			PreviewNode.transform.localScale = Vector3.zero;
-		}
-		else
-		{
-			previewMaterial.color = color;
-			HSL hsl = HSL.RGBToHSL(color);
-			PreviewNode.transform.localPosition = hsl.ToPosition();
-			PreviewNode.transform.localRotation = PositionToRotation(PreviewNode.transform.localPosition);
-			PreviewNode.transform.localScale = Vector3.one * manager.PreviewNodeSize;
-
-		}
-	}
-	
-
-
-	public void DeletePreviewNode()
-	{
-		GameObject.Destroy(PreviewNode);
-		PreviewNode = null;
-		previewMaterial = null;
-	}
-
-	/// <summary>
-	/// Undo　最後に作ったノードから順番に削除
-	/// </summary>
-	public void UndoAdditiveNode()
-	{
-		if (AdditiveNodes.Count == 0)
-			return;
-		GameObject.Destroy(AdditiveNodes[AdditiveNodes.Count - 1]);
-		AdditiveNodes.RemoveAt(AdditiveNodes.Count - 1);
-	}
-
-	public void ClearAllAdditiveNode()
-	{
-		foreach(GameObject g in AdditiveNodes)
-		{
-			GameObject.Destroy(g);
-		}
-		AdditiveNodes.Clear();
-	}
-
-
-	public void SetAllAdditiveNodeSize(float size)
-	{
-		if (AdditiveNodes == null ||  AdditiveNodes.Count == 0)
-			return;
-
-		for (int i = 0; i < AdditiveNodes.Count; i++)
-		{
-			AdditiveNodes[i].transform.localScale = Vector3.one * size;
-		}
-	}
-	public void ShowGrid()
-	{
-		grid.SetActive(!grid.activeSelf);
-	}
-
-	/// <summary>
-	/// 現在表示中のノードをファイルに保存
-	/// </summary>
-	public void Save()
-	{
-		if (AdditiveNodes.Count == 0)
-			return;
-
-		//ファイルパス生成
-		var path = "Assets/SaveData/";
-
-		DateTime dt = DateTime.Now;
-		string now = dt.Year.ToString("d4") + dt.Month.ToString("d2") + dt.Day.ToString("d2") + dt.Hour.ToString("d2") + dt.Minute.ToString("d2") + dt.Second.ToString("d2");
-		var fileName = manager.Picture.name + "_" + now;
-		if (!Directory.Exists(path))
-			Directory.CreateDirectory(path);
-
-		//ScriptableObject作成
-		var saveData = ScriptableObject.CreateInstance<SaveData>();
-
-		//CSVデータ作成
-		StreamWriter csvSw;
-		FileInfo csvFI = new FileInfo(path + fileName + ".csv");
-		csvSw = csvFI.AppendText();
-		csvSw.WriteLine("PosX,PosY,PosZ,H(0.0-1.0),S(0.0-1.0),L(0.0-1.0),R(0-255),G(0-255),B(0-255)");
-
-		Vector3[] positions = new Vector3[AdditiveNodes.Count];
-		for(int i = 0; i < positions.Length; i++)
-		{
-			positions[i] = AdditiveNodes[i].transform.localPosition;
-
-			HSL hsl = HSL.PositionToHSL(positions[i]);
-			Color rgb = hsl.ToRgb();
-			csvSw.WriteLine(positions[i].x + "," + positions[i].y + "," + positions[i].z+","+
-				hsl.h + "," + hsl.s + "," + hsl.l + "," +
-				(int)(rgb.r * 255.0f) + "," + (int)(rgb.g * 255.0f) + "," + (int)(rgb.b * 255.0f));
-
-
+			Root.transform.localPosition = Vector3.SmoothDamp(Root.transform.localPosition, moveTargetPos, ref velocity, SeparateMoveSpeed, float.MaxValue, Time.deltaTime);
 		}
 
-		//ScriptableObject保存
-		saveData.Position = positions;
-		AssetDatabase.CreateAsset(saveData, path + fileName + ".asset");
 
-		//CSV保存
-		csvSw.Flush();
-		csvSw.Close();
 
+		/// <summary>
+		/// ノードの作成
+		/// </summary>
+		/// <param name="position"></param>
+		/// <param name="size"></param>
+		/// <param name="nodeType"></param>
+		/// <returns></returns>
+		public GameObject CreateNode(Vector3 position, float size, NodeType nodeType, Material material)
+		{
+			var primitiveType = manager.Shape == ShapeType.SPHERE ? PrimitiveType.Sphere : PrimitiveType.Cube;
+			GameObject nodeObj = GameObject.CreatePrimitive(primitiveType);
+
+			GameObject.Destroy(nodeObj.GetComponent<Collider>());
+
+
+			nodeObj.GetComponent<MeshRenderer>().material = material;
+			HSL hsl = HSL.PositionToHSL(position);
+			Color color = hsl.ToRgb();
+
+			var m = nodeObj.GetComponent<MeshRenderer>().material;
+			m.color = color;
+
+			switch (nodeType)
+			{
+				case NodeType.INIT:
+					nodeObj.name = "Init" + nodeObj.name;
+					nodeObj.transform.parent = initNodesParent.transform;
+					InitNodes.Add(nodeObj);
+					break;
+				case NodeType.ADDITIVE:
+					nodeObj.name = "Additive" + nodeObj.name;
+					nodeObj.transform.parent = additiveNodesParent.transform;
+					AdditiveNodes.Add(nodeObj);
+					break;
+				case NodeType.PREVIEW:
+					nodeObj.name = "Preview" + nodeObj.name;
+					nodeObj.transform.parent = Root.transform;
+					PreviewNode = nodeObj;
+					break;
+			}
+
+			nodeObj.transform.localPosition = position;
+
+			nodeObj.transform.localRotation = PositionToRotation(position);
+			nodeObj.transform.localScale = Vector3.one * size;
+
+
+			return nodeObj;
+		}
+
+		/// <summary>
+		/// 一度配置したノードのシェイプを一括変更
+		/// </summary>
+		/// <param name="mesh"></param>
+		public void ChangeSphapeType(Mesh mesh)
+		{
+			PreviewNode.GetComponent<MeshFilter>().mesh = mesh;
+			for(int i = 0; i < AdditiveNodes.Count; i++)
+			{
+				AdditiveNodes[i].GetComponent<MeshFilter>().mesh = mesh;
+			}
+			for(int i=0;i<InitNodes.Count;i++)
+			{
+				InitNodes[i].GetComponent<MeshFilter>().mesh = mesh;
+			}
+		}
+
+		public void CreatePreviewNode()
+		{
+			//球を作った瞬間見えちゃうので、一旦カメラの後ろに隠した位置に生成しています
+			Transform cameraTrs = Camera.main.transform;
+			GameObject obj = CreateNode(cameraTrs.position - cameraTrs.forward, manager.PreviewNodeSize, NodeType.PREVIEW, manager.PreviewMaterial);
+			previewMaterial = obj.GetComponent<Renderer>().material;
+		}
+
+		Quaternion PositionToRotation(Vector3 position)
+		{
+			//回転決定。中心縦軸はLookRotation出来ないので除外
+			Vector3 p = position;
+			p.y = 0.0f;
+			if (p.sqrMagnitude > float.Epsilon)
+				return Quaternion.LookRotation(Vector3.zero - position, Vector3.up);
+			return Quaternion.identity;
+		}
+
+		/// <summary>
+		/// 追加するノード作成
+		/// </summary>
+		/// <returns>ノード作成成功したかどうか</returns>
+		public bool CreateAdditiveNode()
+		{
+			if (manager.MaxAdditiveNodeNum <= AdditiveNodes.Count)
+				return false;
+			CreateNode(PreviewNode.transform.localPosition, manager.AdditiveNodeSize, NodeType.ADDITIVE, manager.Material);
+			return true;
+		}
+
+		/// <summary>
+		/// プレビューノード更新
+		/// </summary>
+		/// <param name="color"></param>
+		/// <param name="isInImage"></param>
+		public void UpdatePreviewNode(Color color, bool isInImage)
+		{
+
+			if (!isInImage)
+			{
+				//画像の外にマウスカーソルがある時は、サイズを0にして隠す
+				PreviewNode.transform.localScale = Vector3.zero;
+			}
+			else
+			{
+				previewMaterial.color = color;
+				HSL hsl = HSL.RGBToHSL(color);
+				PreviewNode.transform.localPosition = hsl.ToPosition();
+				PreviewNode.transform.localRotation = PositionToRotation(PreviewNode.transform.localPosition);
+				PreviewNode.transform.localScale = Vector3.one * manager.PreviewNodeSize;
+
+			}
+		}
+
+
+
+		public void DeletePreviewNode()
+		{
+			GameObject.Destroy(PreviewNode);
+			PreviewNode = null;
+			previewMaterial = null;
+		}
+
+		/// <summary>
+		/// Undo　最後に作ったノードから順番に削除
+		/// </summary>
+		public void UndoAdditiveNode()
+		{
+			if (AdditiveNodes.Count == 0)
+				return;
+			GameObject.Destroy(AdditiveNodes[AdditiveNodes.Count - 1]);
+			AdditiveNodes.RemoveAt(AdditiveNodes.Count - 1);
+		}
+
+		public void ClearAllAdditiveNode()
+		{
+			foreach (GameObject g in AdditiveNodes)
+			{
+				GameObject.Destroy(g);
+			}
+			AdditiveNodes.Clear();
+		}
+
+
+		public void SetAllAdditiveNodeSize(float size)
+		{
+			if (AdditiveNodes == null || AdditiveNodes.Count == 0)
+				return;
+
+			for (int i = 0; i < AdditiveNodes.Count; i++)
+			{
+				AdditiveNodes[i].transform.localScale = Vector3.one * size;
+			}
+		}
+		public void ShowGrid()
+		{
+			grid.SetActive(!grid.activeSelf);
+		}
+
+		/// <summary>
+		/// 現在表示中のノードをファイルに保存
+		/// </summary>
+		public void Save()
+		{
+			if (AdditiveNodes.Count == 0)
+				return;
+
+			//ファイルパス生成
+			var path = "Assets/SaveData/";
+
+			DateTime dt = DateTime.Now;
+			string now = dt.Year.ToString("d4") + dt.Month.ToString("d2") + dt.Day.ToString("d2") + dt.Hour.ToString("d2") + dt.Minute.ToString("d2") + dt.Second.ToString("d2");
+			var fileName = manager.Picture.name + "_" + now;
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+
+			//ScriptableObject作成
+			var saveData = ScriptableObject.CreateInstance<SaveData>();
+
+			//CSVデータ作成
+			StreamWriter csvSw;
+			FileInfo csvFI = new FileInfo(path + fileName + ".csv");
+			csvSw = csvFI.AppendText();
+			csvSw.WriteLine("PosX,PosY,PosZ,H(0.0-1.0),S(0.0-1.0),L(0.0-1.0),R(0-255),G(0-255),B(0-255)");
+
+			Vector3[] positions = new Vector3[AdditiveNodes.Count];
+			for (int i = 0; i < positions.Length; i++)
+			{
+				positions[i] = AdditiveNodes[i].transform.localPosition;
+
+				HSL hsl = HSL.PositionToHSL(positions[i]);
+				Color rgb = hsl.ToRgb();
+				csvSw.WriteLine(positions[i].x + "," + positions[i].y + "," + positions[i].z + "," +
+					hsl.h + "," + hsl.s + "," + hsl.l + "," +
+					(int)(rgb.r * 255.0f) + "," + (int)(rgb.g * 255.0f) + "," + (int)(rgb.b * 255.0f));
+
+
+			}
+
+			//ScriptableObject保存
+			saveData.Position = positions;
+			AssetDatabase.CreateAsset(saveData, path + fileName + ".asset");
+
+			//CSV保存
+			csvSw.Flush();
+			csvSw.Close();
+
+		}
 	}
 }

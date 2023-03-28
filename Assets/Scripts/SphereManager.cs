@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,10 +31,11 @@ namespace IroSphere
 		[SerializeField, Tooltip("拡縮速度")]
 		float scaleSpeed = 2.0f;
 
+		[SerializeField, Tooltip("形状タイプ")]
+		ShapeType shapeType = ShapeType.SPHERE;
+		public ShapeType Shape => shapeType;
 
 		[Header("初期配置のノードのパラメーター（実行中変更不可）")]
-		[SerializeField,Tooltip("形状タイプ")]
-		ShapeType initShapeType = ShapeType.SPHERE;
 
 		[SerializeField, Range(1, 32), Tooltip("色相方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumH = 21;
@@ -46,22 +48,14 @@ namespace IroSphere
 		[SerializeField, Tooltip("初期配置ノードのサイズ")]
 		float initNodeSize = 0.02f;
 
-		[Header("プレビュー用の球のパラメーター")]
-		[SerializeField, Tooltip("形状タイプ")]
-		ShapeType previewNodeShapeType = ShapeType.SPHERE;
-		public ShapeType PreviewNodeShapeType => previewNodeShapeType;
-
-		[SerializeField, Tooltip("クリックして置ける球のサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
+		[Header("プレビュー用のノードのパラメーター")]
+		[SerializeField, Tooltip("マウスカーソルあてた時のノードのサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
 		float previewNodeSize = 0.4f;
 		public float PreviewNodeSize => previewNodeSize;
 
 
 
-		[Header("クリックで追加する球のパラメーター")]
-
-		[SerializeField, Tooltip("形状タイプ")]
-		ShapeType additiveShapeType = ShapeType.SPHERE;
-		public ShapeType AdditiveShapeType => additiveShapeType;
+		[Header("クリックで追加するノードのパラメーター")]
 
 		[SerializeField, Tooltip("クリックして置ける球のサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
 		float additiveNodeSize = 0.2f;
@@ -75,7 +69,13 @@ namespace IroSphere
 		[SerializeField]
 		SaveData saveData;
 
-		[Header("ここから↓は触らないで下さい")]
+		[Header("▲ここから↓は触らないで下さい▲")]
+		[SerializeField]
+		Mesh sphereMesh;
+
+		[SerializeField]
+		Mesh cubeMesh;
+
 		[SerializeField]
 		GameObject imageObj;
 
@@ -156,9 +156,12 @@ namespace IroSphere
 		Vector2 offsetInfoB = new Vector2(130.0f, 130.0f);
 		float infoBarSize = 230.0f;
 
+		ShapeType pastShapeType;
 
 		private void OnValidate()
 		{
+			if (!EditorApplication.isPlaying)
+				return;
 
 			foreach(Sphere s in spheres)
 			{
@@ -168,6 +171,10 @@ namespace IroSphere
 			}
 
 			SetImageSize();
+
+
+
+
 
 		}
 
@@ -191,6 +198,8 @@ namespace IroSphere
 			infoImageG = infoObjG.GetComponent<Image>();
 			infoRectB = infoObjB.GetComponent<RectTransform>();
 			infoImageB = infoObjB.GetComponent<Image>();
+
+			pastShapeType = shapeType;
 
 		}
 
@@ -230,6 +239,7 @@ namespace IroSphere
 			Save();
 			Load();
 			EnableInfomation();
+			ChangeShape();
 		}
 
 		public bool CreateAdditiveNode()
@@ -279,7 +289,7 @@ namespace IroSphere
 					{
 						Quaternion rot = Quaternion.AngleAxis(elevation, Vector3.right);
 						Vector3 pos = rot * Vector3.forward * radius;
-						spheres[parentID].CreateNode(pos, initNodeSize * radius, NodeType.INIT, initShapeType, material);
+						spheres[parentID].CreateNode(pos, initNodeSize * radius, NodeType.INIT, material);
 
 						parentID = parentID == 0 ? 1 : 0;
 					}
@@ -295,7 +305,7 @@ namespace IroSphere
 
 							float size = Mathf.Lerp(initNodeSize, initNodeSize * radius, initNodeCenterSmall);
 
-							spheres[parentID].CreateNode(pos, size, NodeType.INIT, initShapeType, material);
+							spheres[parentID].CreateNode(pos, size, NodeType.INIT, material);
 
 							parentID = parentID == 0 ? 1 : 0;
 
@@ -515,6 +525,23 @@ namespace IroSphere
 				}
 			}
 		}
+
+		/// <summary>
+		/// 実行中のシェイプの変更受付
+		/// </summary>
+		void ChangeShape()
+		{
+			//本当はOnValidateで処理したいけど、Warningが出てしまうのでUpdateで。。。
+
+			if (pastShapeType == shapeType)
+				return;
+
+			Mesh mesh = shapeType == ShapeType.BOX ? cubeMesh : sphereMesh;
+			spheres[currentSphereID].ChangeSphapeType(mesh);
+
+			pastShapeType = shapeType;
+		}
+
 
 		/// <summary>
 		/// 現在表示中のノードをファイルに保存
