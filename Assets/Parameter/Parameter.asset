@@ -18,11 +18,11 @@ MonoBehaviour:
   moveSpeed: 2
   scaleSpeed: 2
   shapeType: 0
-  initNodeNumH: 23
-  initNodeNumS: 8
+  initNodeNumH: 24
+  initNodeNumS: 1
   initNodeNumL: 15
+  initNodeSize: 0.02
   initNodeCenterSmall: 1
-  initNodeSize: 0.047
   previewNodeSize: 0.3
   additiveNodeSize: 0.2
   maxAdditiveNodeNum: 500

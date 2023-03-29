@@ -7,6 +7,9 @@ using static IroSphere.SphereManager;
 
 namespace IroSphere
 {
+
+
+
 	[CreateAssetMenu(menuName = "IroSphere/Parameter", fileName = "Parameter")]
 	public class Parameter : ScriptableObject
 	{
@@ -33,47 +36,51 @@ namespace IroSphere
 		float scaleSpeed = 2.0f;
 		public float ScaleSpeed => scaleSpeed;
 
+		[Header("ノード形状タイプ")]
 		[SerializeField, Tooltip("形状タイプ")]
 		ShapeType shapeType = ShapeType.SPHERE;
 		public ShapeType ShapeType => shapeType;
 
-		[Header("初期配置のノードのパラメーター（実行中変更不可）")]
+		[Header("初期配置ノードの個数（▲ゲーム実行中変更不可▲）")]
 
-		[SerializeField, Range(1, 32), Tooltip("色相方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
+		[SerializeField, DisableEditOnPlay, Range(1, 32), Tooltip("色相方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumH = 21;
 		public int InitNodeNumH => initNodeNumH;
 
 
-		[SerializeField, Range(1, 10), Tooltip("彩度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
+		[SerializeField, DisableEditOnPlay, Range(1, 10), Tooltip("彩度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumS = 7;
 		public int InitNodeNumS => initNodeNumS;
 
-		[SerializeField, Range(1, 19), Tooltip("明度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
+		[SerializeField, DisableEditOnPlay, Range(1, 19), Tooltip("明度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumL = 15;
 		public int InitNodeNumL => initNodeNumL;
+
+		[Header("初期配置のノードのサイズ")]
+
+		[SerializeField, Range(0.0f, 1.0f), Tooltip("初期配置ノードのサイズ")]
+		float initNodeSize = 0.02f;
+		public float InitNodeSize => initNodeSize;
 
 		[SerializeField, Range(0.0f, 1.0f), Tooltip("中心方向に行くに従って小さくするかどうか")]
 		float initNodeCenterSmall = 1;
 		public float InitNodeCenterSmall => initNodeCenterSmall;
 
-		[SerializeField, Range(0.01f, 1.0f), Tooltip("初期配置ノードのサイズ")]
-		float initNodeSize = 0.02f;
-		public float InitNodeSize => initNodeSize;
+		[Header("プレビュー用ノードのサイズ")]
 
-		[Header("プレビュー用のノードのパラメーター")]
-
-		[SerializeField, Range(0.01f, 1.0f), Tooltip("マウスカーソルあてた時のノードのサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
+		[SerializeField, Range(0.0f, 1.0f), Tooltip("マウスカーソルあてた時のノードのサイズ")]
 		float previewNodeSize = 0.4f;
 		public float PreviewNodeSize => previewNodeSize;
 
 
-		[Header("クリックで追加するノードのパラメーター")]
+		[Header("クリックで追加するノードのサイズ")]
 
-		[SerializeField, Range(0.01f, 1.0f), Tooltip("クリックして置ける球のサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
+		[SerializeField, Range(0.0f, 1.0f), Tooltip("クリックして置ける球のサイズ")]
 		float additiveNodeSize = 0.2f;
 		public float AdditiveNodeSize => additiveNodeSize;
 
-		[SerializeField, Range(1, 500), Tooltip("クリックして置ける球の最大数")]
+		[Header("クリックで追加するノードの最大数（▲ゲーム実行中変更不可▲）")]
+		[SerializeField, DisableEditOnPlay, Range(1, 500), Tooltip("クリックして置ける球の最大数")]
 		int maxAdditiveNodeNum = 200;
 		public int MaxAdditiveNodeNum => maxAdditiveNodeNum;
 
