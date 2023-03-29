@@ -17,58 +17,10 @@ namespace IroSphere
 		public enum NodeType { INIT, ADDITIVE ,PREVIEW}
 		public enum ShapeType { SPHERE, BOX}
 
-		[Header("カラーピックしたい画像をここへ")]
-		[SerializeField, Tooltip("画像の設定をSprite(2D and UI)に変更するのをお忘れなく！")]
-		Sprite picture;
-		public Sprite Picture => picture;
-
-		[Header("スフィアの回転、移動、拡縮性能")]
-		[SerializeField, Tooltip("角加速度")]
-		float rotateSpeed = 200.0f;
-		[SerializeField, Tooltip("角速度ブレーキング性能")]
-		float rotateBrake = 3.0f;
-		[SerializeField, Tooltip("移動速度")]
-		float moveSpeed = 2.0f;
-		[SerializeField, Tooltip("拡縮速度")]
-		float scaleSpeed = 2.0f;
-
-		[SerializeField, Tooltip("形状タイプ")]
-		ShapeType shapeType = ShapeType.SPHERE;
-		public ShapeType Shape => shapeType;
-
-		[Header("初期配置のノードのパラメーター（実行中変更不可）")]
-
-		[SerializeField, Range(1, 32), Tooltip("色相方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
-		int initNodeNumH = 21;
-		[SerializeField, Range(1, 10), Tooltip("彩度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
-		int initNodeNumS = 7;
-		[SerializeField, Range(1, 19), Tooltip("明度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
-		int initNodeNumL = 15;
-		[SerializeField, Range(0.0f, 1.0f), Tooltip("中心方向に行くに従って小さくするかどうか")]
-		float initNodeCenterSmall = 1;
-		[SerializeField, Range(0.01f, 1.0f), Tooltip("初期配置ノードのサイズ")]
-		float initNodeSize = 0.02f;
-
-		[Header("プレビュー用のノードのパラメーター")]
-		[SerializeField, Range(0.01f, 1.0f), Tooltip("マウスカーソルあてた時のノードのサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
-		float previewNodeSize = 0.4f;
-		public float PreviewNodeSize => previewNodeSize;
-
-
-
-		[Header("クリックで追加するノードのパラメーター")]
-
-		[SerializeField, Range(0.01f, 1.0f), Tooltip("クリックして置ける球のサイズ。このパラメーターは実行中にリアルタイムに変更可能です")]
-		float additiveNodeSize = 0.2f;
-		public float AdditiveNodeSize => additiveNodeSize;
-
-		[SerializeField, Range(1, 500), Tooltip("クリックして置ける球の最大数")]
-		int maxAdditiveNodeNum = 200;
-		public int MaxAdditiveNodeNum => maxAdditiveNodeNum;
-
-		[Header("ロードしたいファイルをここに入れてLキー")]
 		[SerializeField]
-		SaveData saveData;
+		Parameter param;
+		public Parameter Param => param;
+
 
 		[Header("▲ここから↓は触らないで下さい▲")]
 		[SerializeField]
@@ -143,6 +95,9 @@ namespace IroSphere
 		Sphere[] spheres = new Sphere[2];
 
 
+		Image image;
+		RectTransform ImageRect;
+
 		Vector2 rotate;
 		Vector2 rotateVelocity;
 		float scale = 1.0f;
@@ -169,18 +124,21 @@ namespace IroSphere
 
 		private void OnValidate()
 		{
+			param.manager = this;
+
 			if (!EditorApplication.isPlaying)
 				return;
-
-			ChangeNodeSize();
-			SetImageSize();
 		}
 
 		private void Start()
 		{
+			SetImage();
 			CreateSphere();
 			CreateInitNode();
 			spheres[currentSphereID].CreatePreviewNode();
+
+			image = imageObj.GetComponent<Image>();
+			ImageRect = imageObj.GetComponent<RectTransform>();
 
 			rotate = Vector2.up * -30.0f;
 
@@ -197,11 +155,11 @@ namespace IroSphere
 			infoRectB = infoObjB.GetComponent<RectTransform>();
 			infoImageB = infoObjB.GetComponent<Image>();
 
-			pastPreviewNodeSize = previewNodeSize;
-			pastInitNodeSize = initNodeSize;
-			pastAdditiveNodeSize = additiveNodeSize;
+			pastPreviewNodeSize =  param.PreviewNodeSize;
+			pastInitNodeSize = param.InitNodeSize;
+			pastAdditiveNodeSize = param.AdditiveNodeSize;
 
-			pastShapeType = shapeType;
+			pastShapeType = param.ShapeType;
 
 		}
 
@@ -215,7 +173,8 @@ namespace IroSphere
 				if (s == null)
 					return;
 			}
-			
+
+			SetImage();
 
 			//クリックしたら球作成
 			if (InputMouseButton() && getColor.isInImageRect)
@@ -280,32 +239,32 @@ namespace IroSphere
 		{
 			int parentID = 0;
 
-			for (int k = 0; k < initNodeNumL; k++)
+			for (int k = 0; k < param.InitNodeNumL; k++)
 			{
-				float elevation = initNodeNumL == 1 ? 0.0f : 180.0f / (initNodeNumL - 1) * k - 90.0f;
+				float elevation = param.InitNodeNumL == 1 ? 0.0f : 180.0f / (param.InitNodeNumL - 1) * k - 90.0f;
 
-				for (int j = 1; j <= initNodeNumS; j++)
+				for (int j = 1; j <= param.InitNodeNumS; j++)
 				{
-					float radius = 1.0f / initNodeNumS * j;
+					float radius = 1.0f / param.InitNodeNumS * j;
 					if (elevation >= 90.0f || elevation <= -90.0f)
 					{
 						Quaternion rot = Quaternion.AngleAxis(elevation, Vector3.right);
 						Vector3 pos = rot * Vector3.forward * radius;
-						spheres[parentID].CreateNode(pos, initNodeSize * radius, NodeType.INIT, material);
+						spheres[parentID].CreateNode(pos, param.InitNodeSize * radius, NodeType.INIT, material);
 
 						parentID = parentID == 0 ? 1 : 0;
 					}
 					else
 					{
-						for (int i = 0; i < initNodeNumH; i++)
+						for (int i = 0; i < param.InitNodeNumH; i++)
 						{
 
-							float azimuth = 360.0f / initNodeNumH * i;
+							float azimuth = 360.0f / param.InitNodeNumH * i;
 
 							Quaternion rot = Quaternion.AngleAxis(azimuth, Vector3.up) * Quaternion.AngleAxis(elevation, Vector3.right);
 							Vector3 pos = rot * Vector3.forward * radius;
 
-							float size = Mathf.Lerp(initNodeSize, initNodeSize * radius, initNodeCenterSmall);
+							float size = Mathf.Lerp(param.InitNodeSize, param.InitNodeSize * radius, param.InitNodeCenterSmall);
 
 							spheres[parentID].CreateNode(pos, size, NodeType.INIT, material);
 
@@ -376,8 +335,8 @@ namespace IroSphere
 		/// </summary>
 		void RotateSphere()
 		{
-			rotateVelocity += new Vector2(Input.GetAxis("RotateHorizontal"), -Input.GetAxis("RotateVertical")) * Time.deltaTime * rotateSpeed;
-			rotateVelocity /= (1.0f + rotateBrake * Time.deltaTime);
+			rotateVelocity += new Vector2(Input.GetAxis("RotateHorizontal"), -Input.GetAxis("RotateVertical")) * Time.deltaTime * param.RotateSpeed;
+			rotateVelocity /= (1.0f + param.RotateBrake * Time.deltaTime);
 			rotate += rotateVelocity * Time.deltaTime;
 			if (rotate.x > 180.0f)
 				rotate.x -= 360.0f;
@@ -409,8 +368,8 @@ namespace IroSphere
 		/// </summary>
 		void MoveSphere()
 		{
-			Vector3 p = Vector3.right * moveSpeed * Time.deltaTime * Input.GetAxis("Horizontal");
-			p += Vector3.up * moveSpeed * Time.deltaTime * Input.GetAxis("Vertical");
+			Vector3 p = Vector3.right * param.MoveSpeed * Time.deltaTime * Input.GetAxis("Horizontal");
+			p += Vector3.up * param.MoveSpeed * Time.deltaTime * Input.GetAxis("Vertical");
 			transform.position += p;
 
 			p = transform.position;
@@ -433,7 +392,7 @@ namespace IroSphere
 		/// </summary>
 		void ScaleSphere()
 		{
-			scale += (Input.GetAxis("Scale")+Input.mouseScrollDelta.y*10.0f) * scaleSpeed * Time.deltaTime;
+			scale += (Input.GetAxis("Scale")+Input.mouseScrollDelta.y*10.0f) * param.ScaleSpeed * Time.deltaTime;
 
 			scale = Mathf.Clamp(scale, 0.1f, 10.0f);
 
@@ -485,10 +444,10 @@ namespace IroSphere
 		/// </summary>
 		void UpdateAdditiveNumText()
 		{
-			AdditiveNumText.text = spheres[currentSphereID].AdditiveNodes.Count.ToString() + " / " + maxAdditiveNodeNum;
+			AdditiveNumText.text = spheres[currentSphereID].AdditiveNodes.Count.ToString() + " / " + param.MaxAdditiveNodeNum;
 
 			
-			if (maxAdditiveNodeNum == spheres[currentSphereID].AdditiveNodes.Count)
+			if (param.MaxAdditiveNodeNum <= spheres[currentSphereID].AdditiveNodes.Count)
 			{	//限界の時は赤色
 				AdditiveNumText.color = Color.red;
 			}
@@ -501,29 +460,29 @@ namespace IroSphere
 		/// <summary>
 		/// 画像がドラッグ・アンド・ドロップされると画像のサイズを読み取って配置してくれる
 		/// </summary>
-		void SetImageSize()
+		public void SetImage()
 		{
-			var image = imageObj.GetComponent<Image>();
-			var rect = imageObj.GetComponent<RectTransform>();
+			if (image.sprite == param.Picture)
+				return;
 
-			if (picture == null)
+			if (param.Picture == null)
 			{	//画像が設定されていなかった時
-				image.sprite = picture;
-				rect.sizeDelta = Vector3.one * imageMaxSizeHorizontal;
+				image.sprite = param.Picture;
+				ImageRect.sizeDelta = Vector3.one * imageMaxSizeHorizontal;
 			}
 			else
 			{
-				image.sprite = picture;
-				float width = picture.textureRect.width;
-				float height = picture.textureRect.height;
+				image.sprite = param.Picture;
+				float width = param.Picture.textureRect.width;
+				float height = param.Picture.textureRect.height;
 
 				if (width >= height)
-				{	//横長画像の時
-					rect.sizeDelta = new Vector2(imageMaxSizeHorizontal, imageMaxSizeHorizontal * height / width);
+				{   //横長画像の時
+					ImageRect.sizeDelta = new Vector2(imageMaxSizeHorizontal, imageMaxSizeHorizontal * height / width);
 				}
 				else
-				{	//縦長画像の時
-					rect.sizeDelta = new Vector2(imageMaxSizeVertical * width / height, imageMaxSizeVertical);
+				{   //縦長画像の時
+					ImageRect.sizeDelta = new Vector2(imageMaxSizeVertical * width / height, imageMaxSizeVertical);
 				}
 			}
 		}
@@ -535,53 +494,53 @@ namespace IroSphere
 		{
 			//本当はOnValidateで処理したいけど、Warningが出てしまうのでUpdateで。。。
 
-			if (pastShapeType == shapeType)
+			if (pastShapeType == param.ShapeType)
 				return;
 
-			Mesh mesh = shapeType == ShapeType.BOX ? cubeMesh : sphereMesh;
+			Mesh mesh = param.ShapeType == ShapeType.BOX ? cubeMesh : sphereMesh;
 			spheres[currentSphereID].ChangeSphapeType(mesh);
 
-			pastShapeType = shapeType;
+			pastShapeType = param.ShapeType;
 		}
 
 		/// <summary>
 		/// 実行中のノードサイズ変更
 		/// </summary>
-		void ChangeNodeSize()
+		public void ChangeNodeSize()
 		{
-			if(!Utility.IsEqual(initNodeSize,pastInitNodeSize))
+			if(!Utility.IsEqual(param.InitNodeSize,pastInitNodeSize))
 			{
 				for(int i = 0; i < spheres.Length;i++)
 				{
 					if (spheres[i] == null)
 						continue;
-					spheres[i].ChangeNodeSize(NodeType.INIT, initNodeSize);
+					spheres[i].ChangeNodeSize(NodeType.INIT, param.InitNodeSize);
 				}
 			}
 
-			if (!Utility.IsEqual(previewNodeSize, pastPreviewNodeSize))
+			if (!Utility.IsEqual(param.PreviewNodeSize, pastPreviewNodeSize))
 			{
 				for (int i = 0; i < spheres.Length; i++)
 				{
 					if (spheres[i] == null)
 						continue;
-					spheres[i].ChangeNodeSize(NodeType.PREVIEW, previewNodeSize);
+					spheres[i].ChangeNodeSize(NodeType.PREVIEW, param.PreviewNodeSize);
 				}
 			}
 
-			if (!Utility.IsEqual(additiveNodeSize, pastAdditiveNodeSize))
+			if (!Utility.IsEqual(param.AdditiveNodeSize, pastAdditiveNodeSize))
 			{
 				for (int i = 0; i < spheres.Length; i++)
 				{
 					if (spheres[i] == null)
 						continue;
-					spheres[i].ChangeNodeSize(NodeType.ADDITIVE, additiveNodeSize);
+					spheres[i].ChangeNodeSize(NodeType.ADDITIVE, param.AdditiveNodeSize);
 				}
 			}
 
-			pastInitNodeSize = initNodeSize;
-			pastPreviewNodeSize = previewNodeSize;
-			pastAdditiveNodeSize = additiveNodeSize;
+			pastInitNodeSize = param.InitNodeSize;
+			pastPreviewNodeSize = param.PreviewNodeSize;
+			pastAdditiveNodeSize = param.AdditiveNodeSize;
 
 		}
 
@@ -605,12 +564,12 @@ namespace IroSphere
 		/// </summary>
 		void Load()
 		{
-			if (!Input.GetButtonDown("Load") ||saveData == null)
+			if (!Input.GetButtonDown("Load") || param.SaveData == null)
 				return;
 
-			for (int i = 0; i < saveData.Position.Length; i++)
+			for (int i = 0; i < param.SaveData.Position.Length; i++)
 			{
-				HSL hsl = HSL.PositionToHSL(saveData.Position[i]);
+				HSL hsl = HSL.PositionToHSL(param.SaveData.Position[i]);
 				Color color = hsl.ToRgb();
 				UpdatePreviewNode(color, true);
 
@@ -667,8 +626,8 @@ namespace IroSphere
 			infoTextRGB.text = (int)(color.r * 255) + "\n";
 			infoTextRGB.text += (int)(color.g * 255) + "\n";
 			infoTextRGB.text += (int)(color.b * 255) + "\n";
-			infoText.text = "POS : ( " + ((int)(onImagePosRatio.x * picture.rect.width)).ToString() + " , " + 
-				((int)(onImagePosRatio.y * picture.rect.height)).ToString() + " )\n";
+			infoText.text = "POS : ( " + ((int)(onImagePosRatio.x * param.Picture.rect.width)).ToString() + " , " + 
+				((int)(onImagePosRatio.y * param.Picture.rect.height)).ToString() + " )\n";
 			HSL hsl = HSL.RGBToHSL(color);
 			infoText.text += "HSL : ( " + hsl.h.ToString("f2") + " , " + hsl.s.ToString("f2") + " , " + hsl.l.ToString("f2") + " )\n";
 

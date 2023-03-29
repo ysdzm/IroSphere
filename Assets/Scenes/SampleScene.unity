@@ -1276,21 +1276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b047c33397d6b94aac270dc1e532904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  picture: {fileID: 21300000, guid: f1eda39dc8d56b6478e2a888a6dcc9de, type: 3}
-  rotateSpeed: 200
-  rotateBrake: 3
-  moveSpeed: 2
-  scaleSpeed: 2
-  shapeType: 0
-  initNodeNumH: 32
-  initNodeNumS: 1
-  initNodeNumL: 19
-  initNodeCenterSmall: 1
-  initNodeSize: 0.02
-  previewNodeSize: 0.3
-  additiveNodeSize: 0.2
-  maxAdditiveNodeNum: 500
-  saveData: {fileID: 11400000, guid: 7869c111a4fd4924cafee9363cb3e6ab, type: 2}
+  param: {fileID: 11400000, guid: ec928f78ec88d2e43814cd47dcd221cd, type: 2}
   sphereMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   cubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   imageObj: {fileID: 505702780}

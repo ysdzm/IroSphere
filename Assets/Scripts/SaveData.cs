@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace IroSphere
 {
-	[CreateAssetMenu(menuName = "SaveData", fileName = "SaveData")]
+	[CreateAssetMenu(menuName = "IroSphere/SaveData", fileName = "SaveData")]
 	public class SaveData : ScriptableObject
 	{
 		[SerializeField]

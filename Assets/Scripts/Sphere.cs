@@ -79,7 +79,7 @@ namespace IroSphere
 		/// <returns></returns>
 		public GameObject CreateNode(Vector3 position, float size, NodeType nodeType, Material material)
 		{
-			var primitiveType = manager.Shape == ShapeType.SPHERE ? PrimitiveType.Sphere : PrimitiveType.Cube;
+			var primitiveType = manager.Param.ShapeType == ShapeType.SPHERE ? PrimitiveType.Sphere : PrimitiveType.Cube;
 			GameObject nodeObj = GameObject.CreatePrimitive(primitiveType);
 
 			GameObject.Destroy(nodeObj.GetComponent<Collider>());
@@ -141,7 +141,7 @@ namespace IroSphere
 		{
 			//球を作った瞬間見えちゃうので、一旦カメラの後ろに隠した位置に生成しています
 			Transform cameraTrs = Camera.main.transform;
-			GameObject obj = CreateNode(cameraTrs.position - cameraTrs.forward, manager.PreviewNodeSize, NodeType.PREVIEW, manager.PreviewMaterial);
+			GameObject obj = CreateNode(cameraTrs.position - cameraTrs.forward, manager.Param.PreviewNodeSize, NodeType.PREVIEW, manager.PreviewMaterial);
 			previewMaterial = obj.GetComponent<Renderer>().material;
 		}
 
@@ -161,9 +161,9 @@ namespace IroSphere
 		/// <returns>ノード作成成功したかどうか</returns>
 		public bool CreateAdditiveNode()
 		{
-			if (manager.MaxAdditiveNodeNum <= AdditiveNodes.Count)
+			if (manager.Param.MaxAdditiveNodeNum <= AdditiveNodes.Count)
 				return false;
-			CreateNode(PreviewNode.transform.localPosition, manager.AdditiveNodeSize, NodeType.ADDITIVE, manager.Material);
+			CreateNode(PreviewNode.transform.localPosition, manager.Param.AdditiveNodeSize, NodeType.ADDITIVE, manager.Material);
 			return true;
 		}
 
@@ -186,7 +186,7 @@ namespace IroSphere
 				HSL hsl = HSL.RGBToHSL(color);
 				PreviewNode.transform.localPosition = hsl.ToPosition();
 				PreviewNode.transform.localRotation = PositionToRotation(PreviewNode.transform.localPosition);
-				PreviewNode.transform.localScale = Vector3.one * manager.PreviewNodeSize;
+				PreviewNode.transform.localScale = Vector3.one * manager.Param.PreviewNodeSize;
 
 			}
 		}
@@ -269,19 +269,25 @@ namespace IroSphere
 
 			//ファイルパス生成
 			var path = "Assets/SaveData/";
+			var pathCSV = "Assets/SaveDataCSV/";
+
+			//フォルダなかった作成
+			if (!Directory.Exists(path))
+				Directory.CreateDirectory(path);
+			if (!Directory.Exists(pathCSV))
+				Directory.CreateDirectory(pathCSV);
+
 
 			DateTime dt = DateTime.Now;
 			string now = dt.Year.ToString("d4") + dt.Month.ToString("d2") + dt.Day.ToString("d2") + dt.Hour.ToString("d2") + dt.Minute.ToString("d2") + dt.Second.ToString("d2");
-			var fileName = manager.Picture.name + "_" + now;
-			if (!Directory.Exists(path))
-				Directory.CreateDirectory(path);
+			var fileName = manager.Param.Picture.name + "_" + now;
 
 			//ScriptableObject作成
 			var saveData = ScriptableObject.CreateInstance<SaveData>();
 
 			//CSVデータ作成
 			StreamWriter csvSw;
-			FileInfo csvFI = new FileInfo(path + fileName + ".csv");
+			FileInfo csvFI = new FileInfo(pathCSV + fileName + ".csv");
 			csvSw = csvFI.AppendText();
 			csvSw.WriteLine("PosX,PosY,PosZ,H(0.0-1.0),S(0.0-1.0),L(0.0-1.0),R(0-255),G(0-255),B(0-255)");
 
