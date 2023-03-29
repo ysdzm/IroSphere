@@ -243,7 +243,9 @@ namespace IroSphere
 
 					for (int i = 0; i < InitNodes.Count; i++)
 					{
-						InitNodes[i].transform.localScale = Vector3.one * size;
+						float t = InitNodes[i].transform.localPosition.magnitude;
+						float centerSmall = Mathf.Lerp(1.0f, t, manager.Param.InitNodeCenterSmall);
+						InitNodes[i].transform.localScale = Vector3.one * size * centerSmall;
 					}
 					break;
 

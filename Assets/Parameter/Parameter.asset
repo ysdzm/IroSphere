@@ -19,10 +19,10 @@ MonoBehaviour:
   scaleSpeed: 2
   shapeType: 0
   initNodeNumH: 23
-  initNodeNumS: 1
+  initNodeNumS: 8
   initNodeNumL: 15
   initNodeCenterSmall: 1
-  initNodeSize: 0.02
+  initNodeSize: 0.047
   previewNodeSize: 0.3
   additiveNodeSize: 0.2
   maxAdditiveNodeNum: 500

@@ -115,6 +115,7 @@ namespace IroSphere
 		//過去のノードサイズ
 		float pastPreviewNodeSize;
 		float pastInitNodeSize;
+		float pastInitNodeCenterSmall;
 		float pastAdditiveNodeSize;
 
 		ShapeType pastShapeType;
@@ -132,12 +133,13 @@ namespace IroSphere
 
 		private void Start()
 		{
+			image = imageObj.GetComponent<Image>();
+
 			SetImage();
 			CreateSphere();
 			CreateInitNode();
 			spheres[currentSphereID].CreatePreviewNode();
 
-			image = imageObj.GetComponent<Image>();
 			ImageRect = imageObj.GetComponent<RectTransform>();
 
 			rotate = Vector2.up * -30.0f;
@@ -157,6 +159,7 @@ namespace IroSphere
 
 			pastPreviewNodeSize =  param.PreviewNodeSize;
 			pastInitNodeSize = param.InitNodeSize;
+			pastInitNodeCenterSmall = param.InitNodeCenterSmall;
 			pastAdditiveNodeSize = param.AdditiveNodeSize;
 
 			pastShapeType = param.ShapeType;
@@ -508,7 +511,8 @@ namespace IroSphere
 		/// </summary>
 		public void ChangeNodeSize()
 		{
-			if(!Utility.IsEqual(param.InitNodeSize,pastInitNodeSize))
+			if(!Utility.IsEqual(param.InitNodeSize,pastInitNodeSize) ||
+				!Utility.IsEqual(param.InitNodeCenterSmall, pastInitNodeCenterSmall))
 			{
 				for(int i = 0; i < spheres.Length;i++)
 				{
@@ -539,6 +543,7 @@ namespace IroSphere
 			}
 
 			pastInitNodeSize = param.InitNodeSize;
+			pastInitNodeCenterSmall = param.InitNodeCenterSmall;
 			pastPreviewNodeSize = param.PreviewNodeSize;
 			pastAdditiveNodeSize = param.AdditiveNodeSize;
 
