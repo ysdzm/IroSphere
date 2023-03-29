@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c412c629c250c14ba3b932115fb0854, type: 3}
   m_Name: Parameter
   m_EditorClassIdentifier: 
-  picture: {fileID: 21300000, guid: f1eda39dc8d56b6478e2a888a6dcc9de, type: 3}
+  picture: {fileID: 21300000, guid: 78e837e4be79f514386539c3a9217240, type: 3}
   rotateSpeed: 200
   rotateBrake: 3
   moveSpeed: 2

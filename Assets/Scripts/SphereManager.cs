@@ -17,6 +17,8 @@ namespace IroSphere
 		public enum NodeType { INIT, ADDITIVE ,PREVIEW}
 		public enum ShapeType { SPHERE, BOX}
 
+
+		[Header("パラメーター")]
 		[SerializeField]
 		Parameter param;
 		public Parameter Param => param;
@@ -59,6 +61,8 @@ namespace IroSphere
 		GameObject infoObjG;
 		[SerializeField]
 		GameObject infoObjB;
+		[SerializeField]
+		GameObject infoObjColor;
 
 		RectTransform infoTextRect;
 		Text infoText;
@@ -72,6 +76,8 @@ namespace IroSphere
 		Image infoImageG;
 		RectTransform infoRectB;
 		Image infoImageB;
+		RectTransform infoRectColor;
+		Image infoImageColor;
 
 
 
@@ -107,10 +113,11 @@ namespace IroSphere
 		//インフォメーション系の情報
 		bool enableInfo = false;
 		bool pastEnableInfo = false;
-		Vector2 offsetInfoR = new Vector2(130.0f, 195.0f);
-		Vector2 offsetInfoG = new Vector2(130.0f, 162.0f);
-		Vector2 offsetInfoB = new Vector2(130.0f, 130.0f);
-		float infoBarSize = 230.0f;
+		[SerializeField]Vector2 offsetInfoR = new Vector2(260.0f, 195.0f);
+		[SerializeField] Vector2 offsetInfoG = new Vector2(360.0f, 162.0f);
+		[SerializeField] Vector2 offsetInfoB = new Vector2(460.0f, 130.0f);
+		[SerializeField] Vector2 offsetInfoColor = new Vector2(100.0f, 110.0f);
+		[SerializeField] float infoBarSize = 270.0f;
 
 		//過去のノードサイズ
 		float pastPreviewNodeSize;
@@ -134,16 +141,7 @@ namespace IroSphere
 		private void Start()
 		{
 			image = imageObj.GetComponent<Image>();
-
-			SetImage();
-			CreateSphere();
-			CreateInitNode();
-			spheres[currentSphereID].CreatePreviewNode();
-
 			ImageRect = imageObj.GetComponent<RectTransform>();
-
-			rotate = Vector2.up * -30.0f;
-
 			infoTextRect = infoObjText.GetComponent<RectTransform>();
 			infoText = infoObjText.GetComponent<Text>();
 			infoTextRectRGB = infoObjTextRGB.GetComponent<RectTransform>();
@@ -156,6 +154,18 @@ namespace IroSphere
 			infoImageG = infoObjG.GetComponent<Image>();
 			infoRectB = infoObjB.GetComponent<RectTransform>();
 			infoImageB = infoObjB.GetComponent<Image>();
+			infoRectColor = infoObjColor.GetComponent<RectTransform>();
+			infoImageColor = infoObjColor.GetComponent<Image>();
+
+			SetImage();
+			CreateSphere();
+			CreateInitNode();
+			spheres[currentSphereID].CreatePreviewNode();
+
+
+			rotate = Vector2.up * -30.0f;
+
+
 
 			pastPreviewNodeSize =  param.PreviewNodeSize;
 			pastInitNodeSize = param.InitNodeSize;
@@ -602,6 +612,7 @@ namespace IroSphere
 				infoText.enabled = true;
 				infoTextRGB.enabled = true;
 				infoImageBG.enabled = true;
+				infoImageColor.enabled = true;
 			}
 			else if(!enableInfo && pastEnableInfo)
 			{
@@ -611,6 +622,7 @@ namespace IroSphere
 				infoText.enabled = false;
 				infoTextRGB.enabled = false;
 				infoImageBG.enabled = false;
+				infoImageColor.enabled = false;
 			}
 			pastEnableInfo = enableInfo;
 
@@ -623,6 +635,7 @@ namespace IroSphere
 			infoRectR.position = mousePos + offsetInfoR;
 			infoRectG.position = mousePos + offsetInfoG;
 			infoRectB.position = mousePos + offsetInfoB;
+			infoRectColor.position = mousePos + offsetInfoColor;
 
 			infoRectR.sizeDelta = new Vector2(color.r * infoBarSize, 5.0f);
 			infoRectG.sizeDelta = new Vector2(color.g * infoBarSize, 5.0f);
@@ -636,7 +649,7 @@ namespace IroSphere
 			HSL hsl = HSL.RGBToHSL(color);
 			infoText.text += "HSL : ( " + hsl.h.ToString("f2") + " , " + hsl.s.ToString("f2") + " , " + hsl.l.ToString("f2") + " )\n";
 
-
+			infoImageColor.color = color;
 
 		}
 
