@@ -1,11 +1,7 @@
-using IroSphere;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Properties;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static IroSphere.SphereManager;
 using System.IO;
 
@@ -58,11 +54,21 @@ namespace IroSphere
 			grid = GameObject.Instantiate(sphereManager.Grid, Root.transform);
 			grid.SetActive(true);
 		}
+
+
+		/// <summary>
+		/// 回転
+		/// </summary>
+		/// <param name="rotation"></param>
 		public void SetRotation(Quaternion rotation)
 		{
 			Root.transform.localRotation = rotation;
 		}
 
+
+		/// <summary>
+		/// 移動
+		/// </summary>
 		public void UpdateMove()
 		{
 			Root.transform.localPosition = Vector3.SmoothDamp(Root.transform.localPosition, moveTargetPos, ref velocity, SeparateMoveSpeed, float.MaxValue, Time.deltaTime);
@@ -139,6 +145,9 @@ namespace IroSphere
 			}
 		}
 
+		/// <summary>
+		/// プレビューノード作成
+		/// </summary>
 		public void CreatePreviewNode()
 		{
 			//球を作った瞬間見えちゃうので、一旦カメラの後ろに隠した位置に生成しています
@@ -147,6 +156,11 @@ namespace IroSphere
 			previewMaterial = obj.GetComponent<Renderer>().material;
 		}
 
+		/// <summary>
+		/// 位置座標から回転値を求める
+		/// </summary>
+		/// <param name="position"></param>
+		/// <returns></returns>
 		Quaternion PositionToRotation(Vector3 position)
 		{
 			//回転決定。中心縦軸はLookRotation出来ないので除外
@@ -194,7 +208,9 @@ namespace IroSphere
 		}
 
 
-
+		/// <summary>
+		/// プレビューノードの削除
+		/// </summary>
 		public void DeletePreviewNode()
 		{
 			GameObject.Destroy(PreviewNode);
@@ -213,6 +229,9 @@ namespace IroSphere
 			AdditiveNodes.RemoveAt(AdditiveNodes.Count - 1);
 		}
 
+		/// <summary>
+		/// 全ての追加ノードの削除
+		/// </summary>
 		public void ClearAllAdditiveNode()
 		{
 			foreach (GameObject g in AdditiveNodes)
@@ -258,6 +277,10 @@ namespace IroSphere
 					break;
 			}
 		}
+
+		/// <summary>
+		/// グリッドの表示
+		/// </summary>
 		public void ShowGrid()
 		{
 			grid.SetActive(!grid.activeSelf);

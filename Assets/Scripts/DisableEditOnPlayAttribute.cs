@@ -10,6 +10,7 @@ public class DisableEditOnPlayAttribute : PropertyAttribute
 
 public class DisableEditOnPlayDrawer : PropertyDrawer
 {
+	//ゲーム実行中グレーアウト
 	public override void OnGUI(Rect aPosition, SerializedProperty aProperty, GUIContent aLabel)
 	{
 		EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);

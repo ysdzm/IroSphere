@@ -8,8 +8,6 @@ using static IroSphere.SphereManager;
 namespace IroSphere
 {
 
-
-
 	[CreateAssetMenu(menuName = "IroSphere/Parameter", fileName = "Parameter")]
 	public class Parameter : ScriptableObject
 	{
@@ -58,13 +56,13 @@ namespace IroSphere
 		float initNodeSize = 0.02f;
 		public float InitNodeSize => initNodeSize;
 
-		[SerializeField, Range(0.0f, 1.0f), Tooltip("中心方向に行くに従って小さくするかどうか")]
+		[SerializeField, Range(0.0f, 1.0f), Tooltip("スフィアの中心方向に行くに従って小さくするかどうか")]
 		float initNodeCenterSmall = 1;
 		public float InitNodeCenterSmall => initNodeCenterSmall;
 
 		[Header("プレビュー用ノードのサイズ")]
 
-		[SerializeField, Range(0.0f, 1.0f), Tooltip("マウスカーソルあてた時のノードのサイズ")]
+		[SerializeField, Range(0.0f, 1.0f), Tooltip("プレビューノードのサイズ")]
 		float previewNodeSize = 0.4f;
 		public float PreviewNodeSize => previewNodeSize;
 

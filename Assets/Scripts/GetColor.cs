@@ -70,12 +70,14 @@ namespace IroSphere
 			sphereManager.UpdateInformation(isInImageRect, mousePos, color, onImagePosRatio);
 		}
 
-			private void Update()
+		private void Update()
 		{
 			ShowImage();
 		}
 
-
+		/// <summary>
+		/// 画像の表示
+		/// </summary>
 		void ShowImage()
 		{
 			if (!Input.GetButtonDown("ShowImage"))

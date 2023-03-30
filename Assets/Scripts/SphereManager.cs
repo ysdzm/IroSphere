@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
-using System.Threading;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -110,6 +105,9 @@ namespace IroSphere
 
 		//移動限界。あまりに画面外に行き過ぎない様に
 		Rect moveSphereLimit = new Rect(-4, -2, 6, 4);
+
+		//インフォメーションウィンドウの高さ
+		int infoWindowHeight = 260;
 
 
 		public GetColor getColor { get; set; }
@@ -634,8 +632,6 @@ namespace IroSphere
 		}
 
 
-
-
 		public void UpdateInformation(bool isInImageRect, Vector2 mousePos, Color color,Vector2 onImagePosRatio)
 		{
 			if (enableInfo && !pastEnableInfo)
@@ -648,7 +644,7 @@ namespace IroSphere
 				infoImageBG.enabled = true;
 				infoImageColor.enabled = true;
 			}
-			else if(!enableInfo && pastEnableInfo)
+			else if(!enableInfo && pastEnableInfo || image)
 			{
 				infoImageR.enabled = false;
 				infoImageG.enabled = false;
@@ -662,6 +658,11 @@ namespace IroSphere
 
 			if (!enableInfo)
 				return;
+
+			if(mousePos.y > Screen.height - infoWindowHeight)
+			{
+				mousePos.y = Screen.height - infoWindowHeight;
+			}
 
 			infoRectBG.position = mousePos;
 			infoTextRectRGB.position = mousePos;

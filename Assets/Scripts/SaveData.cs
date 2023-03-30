@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
+
 
 namespace IroSphere
 {
+	/// <summary>
+	/// セーブデータ
+	/// </summary>
 	[CreateAssetMenu(menuName = "IroSphere/SaveData", fileName = "SaveData")]
 	public class SaveData : ScriptableObject
 	{
