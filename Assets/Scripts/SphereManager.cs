@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.Threading;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +26,7 @@ namespace IroSphere
 
 
 		[Header("パラメーター")]
-		[SerializeField]
+		[SerializeField, DisableEditOnPlay]
 		Parameter param;
 		public Parameter Param => param;
 
@@ -73,6 +75,11 @@ namespace IroSphere
 		GameObject infoObjB;
 		[SerializeField]
 		GameObject infoObjColor;
+		[SerializeField]
+		Image help;
+		[SerializeField]
+		Image saved;
+
 
 		RectTransform infoTextRect;
 		Text infoText;
@@ -224,6 +231,7 @@ namespace IroSphere
 			Load();
 			EnableInfomation();
 			ChangeShape();
+			ShowHelp();
 		}
 
 		public bool CreateAdditiveNode()
@@ -521,7 +529,8 @@ namespace IroSphere
 				return;
 
 			Mesh mesh = param.ShapeType == ShapeType.BOX ? cubeMesh : sphereMesh;
-			spheres[currentSphereID].ChangeSphapeType(mesh);
+			spheres[0].ChangeSphapeType(mesh);
+			spheres[1].ChangeSphapeType(mesh);
 
 			pastShapeType = param.ShapeType;
 		}
@@ -572,22 +581,37 @@ namespace IroSphere
 
 
 
-
+		float showSavedCounter;
 
 		/// <summary>
 		/// 現在表示中のノードをファイルに保存
 		/// </summary>
 		void Save()
 		{
-			if (!Input.GetButtonDown("Save"))
-				return;
-			spheres[currentSphereID].Save();
+			if (Input.GetButtonDown("Save"))
+			{
+				if(spheres[currentSphereID].Save())
+					showSavedCounter = 3.0f;
+			}
+
+			if (showSavedCounter > 0.0f)
+			{
+				showSavedCounter -= Time.deltaTime;
+				if (!saved.enabled)
+					saved.enabled = true;
+			}
+			else
+			{
+				if (saved.enabled)
+					saved.enabled = false;
+			}
 		}
 
-		/// <summary>
-		/// セーブデータからロード
-		/// </summary>
-		void Load()
+
+			/// <summary>
+			/// セーブデータからロード
+			/// </summary>
+			void Load()
 		{
 			if (!Input.GetButtonDown("Load") || saveData == null)
 				return;
@@ -661,6 +685,11 @@ namespace IroSphere
 
 			infoImageColor.color = color;
 
+		}
+		void ShowHelp()
+		{
+			if (Input.GetButtonDown("Help"))
+				help.enabled = !help.enabled;
 		}
 
 	}

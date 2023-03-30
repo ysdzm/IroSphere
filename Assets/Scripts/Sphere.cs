@@ -126,7 +126,9 @@ namespace IroSphere
 		/// <param name="mesh"></param>
 		public void ChangeSphapeType(Mesh mesh)
 		{
-			PreviewNode.GetComponent<MeshFilter>().mesh = mesh;
+			if(previewMaterial!=null)
+				PreviewNode.GetComponent<MeshFilter>().mesh = mesh;
+
 			for(int i = 0; i < AdditiveNodes.Count; i++)
 			{
 				AdditiveNodes[i].GetComponent<MeshFilter>().mesh = mesh;
@@ -264,10 +266,10 @@ namespace IroSphere
 		/// <summary>
 		/// 現在表示中のノードをファイルに保存
 		/// </summary>
-		public void Save()
+		public bool Save()
 		{
 			if (AdditiveNodes.Count == 0)
-				return;
+				return false;
 
 			//ファイルパス生成
 			var path = "Assets/SaveData/";
@@ -314,7 +316,7 @@ namespace IroSphere
 			//CSV保存
 			csvSw.Flush();
 			csvSw.Close();
-
+			return true;
 		}
 	}
 }
