@@ -17,14 +17,24 @@ namespace IroSphere
 		public enum NodeType { INIT, ADDITIVE ,PREVIEW}
 		public enum ShapeType { SPHERE, BOX}
 
+		[Header("カラーピックしたい画像をここへ")]
+		[SerializeField, Tooltip("画像の設定をSprite(2D and UI)に変更するのをお忘れなく！")]
+		Sprite picture;
+		public Sprite Picture => picture;
+
 
 		[Header("パラメーター")]
 		[SerializeField]
 		Parameter param;
 		public Parameter Param => param;
 
+		[Header("ロードしたいファイルをここに入れてLキー")]
+		[SerializeField]
+		SaveData saveData;
+		public SaveData SaveData => saveData;
 
-		[Header("▲ここから↓は触らないで下さい▲")]
+
+		[Header("---▼ここから↓は触らないで下さい▼---")]
 		[SerializeField]
 		Mesh sphereMesh;
 
@@ -113,11 +123,11 @@ namespace IroSphere
 		//インフォメーション系の情報
 		bool enableInfo = false;
 		bool pastEnableInfo = false;
-		[SerializeField]Vector2 offsetInfoR = new Vector2(260.0f, 195.0f);
-		[SerializeField] Vector2 offsetInfoG = new Vector2(360.0f, 162.0f);
-		[SerializeField] Vector2 offsetInfoB = new Vector2(460.0f, 130.0f);
-		[SerializeField] Vector2 offsetInfoColor = new Vector2(100.0f, 110.0f);
-		[SerializeField] float infoBarSize = 270.0f;
+		Vector2 offsetInfoR = new Vector2(250.0f, 205.0f);
+		Vector2 offsetInfoG = new Vector2(250.0f, 170.0f);
+		Vector2 offsetInfoB = new Vector2(250.0f, 135.0f);
+		Vector2 offsetInfoColor = new Vector2(40.0f, 123.0f);
+		float infoBarSize = 210.0f;
 
 		//過去のノードサイズ
 		float pastPreviewNodeSize;
@@ -475,19 +485,19 @@ namespace IroSphere
 		/// </summary>
 		public void SetImage()
 		{
-			if (image.sprite == param.Picture)
+			if (image.sprite == picture)
 				return;
 
-			if (param.Picture == null)
+			if (picture == null)
 			{	//画像が設定されていなかった時
-				image.sprite = param.Picture;
+				image.sprite = picture;
 				ImageRect.sizeDelta = Vector3.one * imageMaxSizeHorizontal;
 			}
 			else
 			{
-				image.sprite = param.Picture;
-				float width = param.Picture.textureRect.width;
-				float height = param.Picture.textureRect.height;
+				image.sprite = picture;
+				float width = picture.textureRect.width;
+				float height = picture.textureRect.height;
 
 				if (width >= height)
 				{   //横長画像の時
@@ -579,12 +589,12 @@ namespace IroSphere
 		/// </summary>
 		void Load()
 		{
-			if (!Input.GetButtonDown("Load") || param.SaveData == null)
+			if (!Input.GetButtonDown("Load") || saveData == null)
 				return;
 
-			for (int i = 0; i < param.SaveData.Position.Length; i++)
+			for (int i = 0; i < saveData.Position.Length; i++)
 			{
-				HSL hsl = HSL.PositionToHSL(param.SaveData.Position[i]);
+				HSL hsl = HSL.PositionToHSL(saveData.Position[i]);
 				Color color = hsl.ToRgb();
 				UpdatePreviewNode(color, true);
 
@@ -644,8 +654,8 @@ namespace IroSphere
 			infoTextRGB.text = (int)(color.r * 255) + "\n";
 			infoTextRGB.text += (int)(color.g * 255) + "\n";
 			infoTextRGB.text += (int)(color.b * 255) + "\n";
-			infoText.text = "POS : ( " + ((int)(onImagePosRatio.x * param.Picture.rect.width)).ToString() + " , " + 
-				((int)(onImagePosRatio.y * param.Picture.rect.height)).ToString() + " )\n";
+			infoText.text = "POS : ( " + ((int)(onImagePosRatio.x * picture.rect.width)).ToString() + " , " + 
+				((int)(onImagePosRatio.y * picture.rect.height)).ToString() + " )\n";
 			HSL hsl = HSL.RGBToHSL(color);
 			infoText.text += "HSL : ( " + hsl.h.ToString("f2") + " , " + hsl.s.ToString("f2") + " , " + hsl.l.ToString("f2") + " )\n";
 

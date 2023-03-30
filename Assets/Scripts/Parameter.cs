@@ -14,10 +14,6 @@ namespace IroSphere
 	public class Parameter : ScriptableObject
 	{
 
-		[Header("カラーピックしたい画像をここへ")]
-		[SerializeField, Tooltip("画像の設定をSprite(2D and UI)に変更するのをお忘れなく！")]
-		Sprite picture;
-		public Sprite Picture => picture;
 
 		[Header("スフィアの回転、移動、拡縮性能")]
 		[SerializeField, Tooltip("角加速度")]
@@ -84,10 +80,7 @@ namespace IroSphere
 		int maxAdditiveNodeNum = 200;
 		public int MaxAdditiveNodeNum => maxAdditiveNodeNum;
 
-		[Header("ロードしたいファイルをここに入れてLキー")]
-		[SerializeField]
-		SaveData saveData;
-		public SaveData SaveData => saveData;
+
 
 		public SphereManager manager { get; set; }
 

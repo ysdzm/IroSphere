@@ -282,7 +282,7 @@ namespace IroSphere
 
 			DateTime dt = DateTime.Now;
 			string now = dt.Year.ToString("d4") + dt.Month.ToString("d2") + dt.Day.ToString("d2") + dt.Hour.ToString("d2") + dt.Minute.ToString("d2") + dt.Second.ToString("d2");
-			var fileName = manager.Param.Picture.name + "_" + now;
+			var fileName = manager.Picture.name + "_" + now;
 
 			//ScriptableObjectçÏê¨
 			var saveData = ScriptableObject.CreateInstance<SaveData>();
