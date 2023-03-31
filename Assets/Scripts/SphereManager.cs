@@ -107,7 +107,8 @@ namespace IroSphere
 		Rect moveSphereLimit = new Rect(-4, -2, 6, 4);
 
 		//インフォメーションウィンドウの高さ
-		int infoWindowHeight = 260;
+		[SerializeField]
+		int infoWindowHeight = 150;
 
 
 		public GetColor getColor { get; set; }
@@ -128,11 +129,11 @@ namespace IroSphere
 		//インフォメーション系の情報
 		bool enableInfo = false;
 		bool pastEnableInfo = false;
-		Vector2 offsetInfoR = new Vector2(250.0f, 205.0f);
-		Vector2 offsetInfoG = new Vector2(250.0f, 170.0f);
-		Vector2 offsetInfoB = new Vector2(250.0f, 135.0f);
-		Vector2 offsetInfoColor = new Vector2(40.0f, 123.0f);
-		float infoBarSize = 210.0f;
+		Vector2 offsetInfoR = new Vector2(134.3f, 122.8f);
+		Vector2 offsetInfoG = new Vector2(134.3f, 105.8f);
+		Vector2 offsetInfoB = new Vector2(134.3f, 89.4f);
+		Vector2 offsetInfoColor = new Vector2(28.0f, 82.4f);
+		float infoBarSize = 65.0f;
 
 		//過去のノードサイズ
 		float pastPreviewNodeSize;
@@ -644,7 +645,7 @@ namespace IroSphere
 				infoImageBG.enabled = true;
 				infoImageColor.enabled = true;
 			}
-			else if(!enableInfo && pastEnableInfo || image)
+			else if(!enableInfo && pastEnableInfo)
 			{
 				infoImageR.enabled = false;
 				infoImageG.enabled = false;
@@ -664,6 +665,9 @@ namespace IroSphere
 				mousePos.y = Screen.height - infoWindowHeight;
 			}
 
+//			mousePos = Vector2.zero;
+//			color = Color.white;
+
 			infoRectBG.position = mousePos;
 			infoTextRectRGB.position = mousePos;
 			infoTextRect.position = mousePos;
@@ -675,11 +679,12 @@ namespace IroSphere
 			infoRectR.sizeDelta = new Vector2(color.r * infoBarSize, 5.0f);
 			infoRectG.sizeDelta = new Vector2(color.g * infoBarSize, 5.0f);
 			infoRectB.sizeDelta = new Vector2(color.b * infoBarSize, 5.0f);
-
+			
 			infoTextRGB.text = (int)(color.r * 255) + "\n";
 			infoTextRGB.text += (int)(color.g * 255) + "\n";
 			infoTextRGB.text += (int)(color.b * 255) + "\n";
-			infoText.text = "POS : ( " + ((int)(onImagePosRatio.x * picture.rect.width)).ToString() + " , " + 
+			infoText.text = "# " + ((int)(color.r * 255.0f)).ToString("x2") + ((int)(color.g * 255.0f)).ToString("x2") + ((int)(color.b * 255.0f)).ToString("x2") + "\n\n" + 
+				"Position : ( " + ((int)(onImagePosRatio.x * picture.rect.width)).ToString() + " , " + 
 				((int)(onImagePosRatio.y * picture.rect.height)).ToString() + " )\n";
 			HSL hsl = HSL.RGBToHSL(color);
 			infoText.text += "HSL : ( " + hsl.h.ToString("f2") + " , " + hsl.s.ToString("f2") + " , " + hsl.l.ToString("f2") + " )\n";

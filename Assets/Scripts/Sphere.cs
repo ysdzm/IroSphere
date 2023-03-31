@@ -316,7 +316,7 @@ namespace IroSphere
 			StreamWriter csvSw;
 			FileInfo csvFI = new FileInfo(pathCSV + fileName + ".csv");
 			csvSw = csvFI.AppendText();
-			csvSw.WriteLine("PosX,PosY,PosZ,H(0.0-1.0),S(0.0-1.0),L(0.0-1.0),R(0-255),G(0-255),B(0-255)");
+			csvSw.WriteLine("PosX,PosY,PosZ,H(0.0-1.0),S(0.0-1.0),L(0.0-1.0),R(0-255),G(0-255),B(0-255),RGB(16)");
 
 			Vector3[] positions = new Vector3[AdditiveNodes.Count];
 			for (int i = 0; i < positions.Length; i++)
@@ -325,9 +325,12 @@ namespace IroSphere
 
 				HSL hsl = HSL.PositionToHSL(positions[i]);
 				Color rgb = hsl.ToRgb();
+
+				string rgb16 = ((int)(rgb.r * 255.0f)).ToString("x2") + ((int)(rgb.g * 255.0f)).ToString("x2") + ((int)(rgb.b * 255.0f)).ToString("x2");
+
 				csvSw.WriteLine(positions[i].x + "," + positions[i].y + "," + positions[i].z + "," +
 					hsl.h + "," + hsl.s + "," + hsl.l + "," +
-					(int)(rgb.r * 255.0f) + "," + (int)(rgb.g * 255.0f) + "," + (int)(rgb.b * 255.0f));
+					(int)(rgb.r * 255.0f) + "," + (int)(rgb.g * 255.0f) + "," + (int)(rgb.b * 255.0f)+","+ rgb16);
 
 
 			}
