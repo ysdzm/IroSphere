@@ -5,7 +5,13 @@
 ■概要
 
 画像の色を参照し、ＨＳＬ色空間に配置します。
+詳しくは動画をご覧ください
 
+Youtube版
+https://youtu.be/jrCr4j_qdPo
+
+ニコニコ版
+https://www.nicovideo.jp/watch/sm42022218
 
 ■簡単な使い方
 
@@ -44,25 +50,24 @@
 
 セーブ　→　K
 
-ロード　→　L
+ロード　→　L（SphereManagerのSaveDataスロットにセーブデータをドラッグ＆ドロップした状態で）
 
 
 ■画像を差し替えたい時
 
-※以下の操作は必ずゲームを止めた状態で行って下さい
 
 ・画像を差し替えたいときは、Hierarchyの「SphereManager」ノードのPictureに画像をドラッグ・アンド・ドロップしてください。
 
 　画像はProjectウィンドウのPictureフォルダにサンプル画像が何枚か入っています。
- 
-・自分の画像を使いたい時は、好きな画像をエクスプローラーからProjectウィンドウの「Picture」フォルダにドラッグ・アンド・ドロップしてインポートし、
+
+・自分の画像を使いたい時は、ゲームを終了状態で、好きな画像をエクスプローラーからProjectウィンドウの「Picture」フォルダにドラッグ・アンド・ドロップしてインポートし、
 　その画像のInspectorで「TextureType」 を「Sprite(2D and UI)」に変更します。あとは同じ操作です。
 
  
 ■パラメーター調整方法
 
-「Hierarchy」の、「SphereManger」のParamにScriptableObjectがささっています。このファイルを編集する事で調整可能です。 
-ゲーム実行中編集負荷のパラメーターは、実行中グレーアウトします
+「Hierarchy」の、「SphereManger」の「Param」にScriptableObjectがささっています。このファイルを編集する事で調整可能です。 
+ゲーム実行中編集不可のパラメーターは、実行中グレーアウトします
  
   ■ライセンスについて
   
