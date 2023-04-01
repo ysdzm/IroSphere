@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,19 +6,19 @@ using UnityEngine;
 public static class Utility
 {
 	/// <summary>
-	/// 2‚Â‚Ìfloat‚Ì·‚ª\•ª¬‚³‚¢‚©‚Ç‚¤‚©‚Ì”»’è
+	/// 2ã¤ã®floatã®å·®ãŒååˆ†å°ã•ã„ã‹ã©ã†ã‹ã®åˆ¤å®š
 	/// </summary>
 	/// <param name="a"></param>
 	/// <param name="b"></param>
 	/// <returns></returns>
 	public static bool IsEqual(float a, float b)
 	{
-		//1/256‚µ‚½’lˆÈ‰º‚ÍŒë·‚Æ‚µ‚ÄØ‚èÌ‚Ä
+		//1/256ã—ãŸå€¤ä»¥ä¸‹ã¯èª¤å·®ã¨ã—ã¦åˆ‡ã‚Šæ¨ã¦
 		return MathF.Abs(a - b) <= 0.004f;
 	}
 
 	/// <summary>
-	/// ƒJƒ‰[‚ğPhotoshop‚È‚Ç‚ÌƒpƒŒƒbƒg‚Åˆµ‚¦‚é16i”Œ`®‚É•ÏŠ·‚·‚é
+	/// ã‚«ãƒ©ãƒ¼ã‚’Photoshopãªã©ã®ãƒ‘ãƒ¬ãƒƒãƒˆã§æ‰±ãˆã‚‹16é€²æ•°å½¢å¼ã«å¤‰æ›ã™ã‚‹
 	/// </summary>
 	/// <param name="color"></param>
 	/// <returns></returns>

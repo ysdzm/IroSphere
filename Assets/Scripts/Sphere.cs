@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -57,7 +57,7 @@ namespace IroSphere
 
 
 		/// <summary>
-		/// ‰ñ“]
+		/// å›è»¢
 		/// </summary>
 		/// <param name="rotation"></param>
 		public void SetRotation(Quaternion rotation)
@@ -67,7 +67,7 @@ namespace IroSphere
 
 
 		/// <summary>
-		/// ˆÚ“®
+		/// ç§»å‹•
 		/// </summary>
 		public void UpdateMove()
 		{
@@ -77,7 +77,7 @@ namespace IroSphere
 
 
 		/// <summary>
-		/// ƒm[ƒh‚Ìì¬
+		/// ãƒãƒ¼ãƒ‰ã®ä½œæˆ
 		/// </summary>
 		/// <param name="position"></param>
 		/// <param name="size"></param>
@@ -127,7 +127,7 @@ namespace IroSphere
 		}
 
 		/// <summary>
-		/// ˆê“x”z’u‚µ‚½ƒm[ƒh‚ÌƒVƒFƒCƒv‚ğˆêŠ‡•ÏX
+		/// ä¸€åº¦é…ç½®ã—ãŸãƒãƒ¼ãƒ‰ã®ã‚·ã‚§ã‚¤ãƒ—ã‚’ä¸€æ‹¬å¤‰æ›´
 		/// </summary>
 		/// <param name="mesh"></param>
 		public void ChangeSphapeType(Mesh mesh)
@@ -146,24 +146,24 @@ namespace IroSphere
 		}
 
 		/// <summary>
-		/// ƒvƒŒƒrƒ…[ƒm[ƒhì¬
+		/// ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒ‰ä½œæˆ
 		/// </summary>
 		public void CreatePreviewNode()
 		{
-			//‹…‚ğì‚Á‚½uŠÔŒ©‚¦‚¿‚á‚¤‚Ì‚ÅAˆê’UƒJƒƒ‰‚ÌŒã‚ë‚É‰B‚µ‚½ˆÊ’u‚É¶¬‚µ‚Ä‚¢‚Ü‚·
+			//çƒã‚’ä½œã£ãŸç¬é–“è¦‹ãˆã¡ã‚ƒã†ã®ã§ã€ä¸€æ—¦ã‚«ãƒ¡ãƒ©ã®å¾Œã‚ã«éš ã—ãŸä½ç½®ã«ç”Ÿæˆã—ã¦ã„ã¾ã™
 			Transform cameraTrs = Camera.main.transform;
 			GameObject obj = CreateNode(cameraTrs.position - cameraTrs.forward, manager.Param.PreviewNodeSize, NodeType.PREVIEW, manager.PreviewMaterial);
 			previewMaterial = obj.GetComponent<Renderer>().material;
 		}
 
 		/// <summary>
-		/// ˆÊ’uÀ•W‚©‚ç‰ñ“]’l‚ğ‹‚ß‚é
+		/// ä½ç½®åº§æ¨™ã‹ã‚‰å›è»¢å€¤ã‚’æ±‚ã‚ã‚‹
 		/// </summary>
 		/// <param name="position"></param>
 		/// <returns></returns>
 		Quaternion PositionToRotation(Vector3 position)
 		{
-			//‰ñ“]Œˆ’èB’†Sc²‚ÍLookRotationo—ˆ‚È‚¢‚Ì‚ÅœŠO
+			//å›è»¢æ±ºå®šã€‚ä¸­å¿ƒç¸¦è»¸ã¯LookRotationå‡ºæ¥ãªã„ã®ã§é™¤å¤–
 			Vector3 p = position;
 			p.y = 0.0f;
 			if (p.sqrMagnitude > float.Epsilon)
@@ -172,9 +172,9 @@ namespace IroSphere
 		}
 
 		/// <summary>
-		/// ’Ç‰Á‚·‚éƒm[ƒhì¬
+		/// è¿½åŠ ã™ã‚‹ãƒãƒ¼ãƒ‰ä½œæˆ
 		/// </summary>
-		/// <returns>ƒm[ƒhì¬¬Œ÷‚µ‚½‚©‚Ç‚¤‚©</returns>
+		/// <returns>ãƒãƒ¼ãƒ‰ä½œæˆæˆåŠŸã—ãŸã‹ã©ã†ã‹</returns>
 		public bool CreateAdditiveNode()
 		{
 			if (manager.Param.MaxAdditiveNodeNum <= AdditiveNodes.Count)
@@ -184,7 +184,7 @@ namespace IroSphere
 		}
 
 		/// <summary>
-		/// ƒvƒŒƒrƒ…[ƒm[ƒhXV
+		/// ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒ‰æ›´æ–°
 		/// </summary>
 		/// <param name="color"></param>
 		/// <param name="isInImage"></param>
@@ -193,7 +193,7 @@ namespace IroSphere
 
 			if (!isInImage)
 			{
-				//‰æ‘œ‚ÌŠO‚Éƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ª‚ ‚é‚ÍAƒTƒCƒY‚ğ0‚É‚µ‚Ä‰B‚·
+				//ç”»åƒã®å¤–ã«ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ãŒã‚ã‚‹æ™‚ã¯ã€ã‚µã‚¤ã‚ºã‚’0ã«ã—ã¦éš ã™
 				PreviewNode.transform.localScale = Vector3.zero;
 			}
 			else
@@ -209,7 +209,7 @@ namespace IroSphere
 
 
 		/// <summary>
-		/// ƒvƒŒƒrƒ…[ƒm[ƒh‚Ìíœ
+		/// ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒ‰ã®å‰Šé™¤
 		/// </summary>
 		public void DeletePreviewNode()
 		{
@@ -219,7 +219,7 @@ namespace IroSphere
 		}
 
 		/// <summary>
-		/// Undo@ÅŒã‚Éì‚Á‚½ƒm[ƒh‚©‚ç‡”Ô‚Éíœ
+		/// Undoã€€æœ€å¾Œã«ä½œã£ãŸãƒãƒ¼ãƒ‰ã‹ã‚‰é †ç•ªã«å‰Šé™¤
 		/// </summary>
 		public void UndoAdditiveNode()
 		{
@@ -230,7 +230,7 @@ namespace IroSphere
 		}
 
 		/// <summary>
-		/// ‘S‚Ä‚Ì’Ç‰Áƒm[ƒh‚Ìíœ
+		/// å…¨ã¦ã®è¿½åŠ ãƒãƒ¼ãƒ‰ã®å‰Šé™¤
 		/// </summary>
 		public void ClearAllAdditiveNode()
 		{
@@ -242,7 +242,7 @@ namespace IroSphere
 		}
 
 		/// <summary>
-		/// Às’†‚Ìƒm[ƒhƒTƒCƒY•ÏX
+		/// å®Ÿè¡Œä¸­ã®ãƒãƒ¼ãƒ‰ã‚µã‚¤ã‚ºå¤‰æ›´
 		/// </summary>
 		public void ChangeNodeSize(NodeType nodeType, float size)
 		{
@@ -279,7 +279,7 @@ namespace IroSphere
 		}
 
 		/// <summary>
-		/// ƒOƒŠƒbƒh‚Ì•\¦
+		/// ã‚°ãƒªãƒƒãƒ‰ã®è¡¨ç¤º
 		/// </summary>
 		public void ShowGrid()
 		{
@@ -287,18 +287,18 @@ namespace IroSphere
 		}
 
 		/// <summary>
-		/// Œ»İ•\¦’†‚Ìƒm[ƒh‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶
+		/// ç¾åœ¨è¡¨ç¤ºä¸­ã®ãƒãƒ¼ãƒ‰ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜
 		/// </summary>
 		public bool Save()
 		{
 			if (AdditiveNodes.Count == 0)
 				return false;
 
-			//ƒtƒ@ƒCƒ‹ƒpƒX¶¬
+			//ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ç”Ÿæˆ
 			var path = "Assets/SaveData/";
 			var pathCSV = "Assets/SaveDataCSV/";
 
-			//ƒtƒHƒ‹ƒ_‚È‚©‚Á‚½ì¬
+			//ãƒ•ã‚©ãƒ«ãƒ€ãªã‹ã£ãŸä½œæˆ
 			if (!Directory.Exists(path))
 				Directory.CreateDirectory(path);
 			if (!Directory.Exists(pathCSV))
@@ -309,10 +309,10 @@ namespace IroSphere
 			string now = dt.Year.ToString("d4") + dt.Month.ToString("d2") + dt.Day.ToString("d2") + dt.Hour.ToString("d2") + dt.Minute.ToString("d2") + dt.Second.ToString("d2");
 			var fileName = manager.Picture.name + "_" + now;
 
-			//ScriptableObjectì¬
+			//ScriptableObjectä½œæˆ
 			var saveData = ScriptableObject.CreateInstance<SaveData>();
 
-			//CSVƒf[ƒ^ì¬
+			//CSVãƒ‡ãƒ¼ã‚¿ä½œæˆ
 			StreamWriter csvSw;
 			FileInfo csvFI = new FileInfo(pathCSV + fileName + ".csv");
 			csvSw = csvFI.AppendText();
@@ -333,11 +333,11 @@ namespace IroSphere
 
 			}
 
-			//ScriptableObject•Û‘¶
+			//ScriptableObjectä¿å­˜
 			saveData.Position = positions;
 			AssetDatabase.CreateAsset(saveData, path + fileName + ".asset");
 
-			//CSV•Û‘¶
+			//CSVä¿å­˜
 			csvSw.Flush();
 			csvSw.Close();
 			return true;

@@ -1,4 +1,4 @@
-using IroSphere;
+ï»¿using IroSphere;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -13,68 +13,68 @@ namespace IroSphere
 	{
 
 
-		[Header("ƒXƒtƒBƒA‚Ì‰ñ“]AˆÚ“®AŠgk«”\")]
-		[SerializeField, Tooltip("Šp‰Á‘¬“x")]
+		[Header("ã‚¹ãƒ•ã‚£ã‚¢ã®å›žè»¢ã€ç§»å‹•ã€æ‹¡ç¸®æ€§èƒ½")]
+		[SerializeField, Tooltip("è§’åŠ é€Ÿåº¦")]
 		float rotateSpeed = 200.0f;
 		public float RotateSpeed => rotateSpeed;
 		
-		[SerializeField, Tooltip("Šp‘¬“xƒuƒŒ[ƒLƒ“ƒO«”\")]
+		[SerializeField, Tooltip("è§’é€Ÿåº¦ãƒ–ãƒ¬ãƒ¼ã‚­ãƒ³ã‚°æ€§èƒ½")]
 		float rotateBrake = 3.0f;
 		public float RotateBrake => rotateBrake;
 		
-		[SerializeField, Tooltip("ˆÚ“®‘¬“x")]
+		[SerializeField, Tooltip("ç§»å‹•é€Ÿåº¦")]
 		float moveSpeed = 2.0f;
 		public float MoveSpeed => moveSpeed;
 
-		[SerializeField, Tooltip("Šgk‘¬“x")]
+		[SerializeField, Tooltip("æ‹¡ç¸®é€Ÿåº¦")]
 		float scaleSpeed = 2.0f;
 		public float ScaleSpeed => scaleSpeed;
 
-		[Header("ƒm[ƒhŒ`óƒ^ƒCƒv")]
-		[SerializeField, Tooltip("Œ`óƒ^ƒCƒv")]
+		[Header("ãƒŽãƒ¼ãƒ‰å½¢çŠ¶ã‚¿ã‚¤ãƒ—")]
+		[SerializeField, Tooltip("å½¢çŠ¶ã‚¿ã‚¤ãƒ—")]
 		ShapeType shapeType = ShapeType.SPHERE;
 		public ShapeType ShapeType => shapeType;
 
-		[Header("‰Šú”z’uƒm[ƒh‚ÌŒÂ”i£ƒQ[ƒ€ŽÀs’†•ÏX•s‰Â£j")]
+		[Header("åˆæœŸé…ç½®ãƒŽãƒ¼ãƒ‰ã®å€‹æ•°ï¼ˆâ–²ã‚²ãƒ¼ãƒ å®Ÿè¡Œä¸­å¤‰æ›´ä¸å¯â–²ï¼‰")]
 
-		[SerializeField, DisableEditOnPlay, Range(0, 32), Tooltip("F‘Š•ûŒü‚Ìƒm[ƒh‚Ì”B“®ì‚ªd‚½‚¢‚ÆŠ´‚¶‚½‚ç‚±‚±‚ð‰º‚°‚Ä‰º‚³‚¢")]
+		[SerializeField, DisableEditOnPlay, Range(0, 32), Tooltip("è‰²ç›¸æ–¹å‘ã®ãƒŽãƒ¼ãƒ‰ã®æ•°ã€‚å‹•ä½œãŒé‡ãŸã„ã¨æ„Ÿã˜ãŸã‚‰ã“ã“ã‚’ä¸‹ã’ã¦ä¸‹ã•ã„")]
 		int initNodeNumH = 21;
 		public int InitNodeNumH => initNodeNumH;
 
 
-		[SerializeField, DisableEditOnPlay, Range(0, 10), Tooltip("Ê“x•ûŒü‚Ìƒm[ƒh‚Ì”B“®ì‚ªd‚½‚¢‚ÆŠ´‚¶‚½‚ç‚±‚±‚ð‰º‚°‚Ä‰º‚³‚¢")]
+		[SerializeField, DisableEditOnPlay, Range(0, 10), Tooltip("å½©åº¦æ–¹å‘ã®ãƒŽãƒ¼ãƒ‰ã®æ•°ã€‚å‹•ä½œãŒé‡ãŸã„ã¨æ„Ÿã˜ãŸã‚‰ã“ã“ã‚’ä¸‹ã’ã¦ä¸‹ã•ã„")]
 		int initNodeNumS = 7;
 		public int InitNodeNumS => initNodeNumS;
 
-		[SerializeField, DisableEditOnPlay, Range(0, 19), Tooltip("–¾“x•ûŒü‚Ìƒm[ƒh‚Ì”B“®ì‚ªd‚½‚¢‚ÆŠ´‚¶‚½‚ç‚±‚±‚ð‰º‚°‚Ä‰º‚³‚¢")]
+		[SerializeField, DisableEditOnPlay, Range(0, 19), Tooltip("æ˜Žåº¦æ–¹å‘ã®ãƒŽãƒ¼ãƒ‰ã®æ•°ã€‚å‹•ä½œãŒé‡ãŸã„ã¨æ„Ÿã˜ãŸã‚‰ã“ã“ã‚’ä¸‹ã’ã¦ä¸‹ã•ã„")]
 		int initNodeNumL = 15;
 		public int InitNodeNumL => initNodeNumL;
 
-		[Header("‰Šú”z’u‚Ìƒm[ƒh‚ÌƒTƒCƒY")]
+		[Header("åˆæœŸé…ç½®ã®ãƒŽãƒ¼ãƒ‰ã®ã‚µã‚¤ã‚º")]
 
-		[SerializeField, Range(0.0f, 1.0f), Tooltip("‰Šú”z’uƒm[ƒh‚ÌƒTƒCƒY")]
+		[SerializeField, Range(0.0f, 1.0f), Tooltip("åˆæœŸé…ç½®ãƒŽãƒ¼ãƒ‰ã®ã‚µã‚¤ã‚º")]
 		float initNodeSize = 0.02f;
 		public float InitNodeSize => initNodeSize;
 
-		[SerializeField, Range(0.0f, 1.0f), Tooltip("ƒXƒtƒBƒA‚Ì’†S•ûŒü‚És‚­‚É]‚Á‚Ä¬‚³‚­‚·‚é‚©‚Ç‚¤‚©")]
+		[SerializeField, Range(0.0f, 1.0f), Tooltip("ã‚¹ãƒ•ã‚£ã‚¢ã®ä¸­å¿ƒæ–¹å‘ã«è¡Œãã«å¾“ã£ã¦å°ã•ãã™ã‚‹ã‹ã©ã†ã‹")]
 		float initNodeCenterSmall = 1;
 		public float InitNodeCenterSmall => initNodeCenterSmall;
 
-		[Header("ƒvƒŒƒrƒ…[—pƒm[ƒh‚ÌƒTƒCƒY")]
+		[Header("ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ãƒŽãƒ¼ãƒ‰ã®ã‚µã‚¤ã‚º")]
 
-		[SerializeField, Range(0.0f, 1.0f), Tooltip("ƒvƒŒƒrƒ…[ƒm[ƒh‚ÌƒTƒCƒY")]
+		[SerializeField, Range(0.0f, 1.0f), Tooltip("ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãƒŽãƒ¼ãƒ‰ã®ã‚µã‚¤ã‚º")]
 		float previewNodeSize = 0.4f;
 		public float PreviewNodeSize => previewNodeSize;
 
 
-		[Header("ƒNƒŠƒbƒN‚Å’Ç‰Á‚·‚éƒm[ƒh‚ÌƒTƒCƒY")]
+		[Header("ã‚¯ãƒªãƒƒã‚¯ã§è¿½åŠ ã™ã‚‹ãƒŽãƒ¼ãƒ‰ã®ã‚µã‚¤ã‚º")]
 
-		[SerializeField, Range(0.0f, 1.0f), Tooltip("ƒNƒŠƒbƒN‚µ‚Ä’u‚¯‚é‹…‚ÌƒTƒCƒY")]
+		[SerializeField, Range(0.0f, 1.0f), Tooltip("ã‚¯ãƒªãƒƒã‚¯ã—ã¦ç½®ã‘ã‚‹çƒã®ã‚µã‚¤ã‚º")]
 		float additiveNodeSize = 0.2f;
 		public float AdditiveNodeSize => additiveNodeSize;
 
-		[Header("ƒNƒŠƒbƒN‚Å’Ç‰Á‚·‚éƒm[ƒh‚ÌÅ‘å”i£ƒQ[ƒ€ŽÀs’†•ÏX•s‰Â£j")]
-		[SerializeField, DisableEditOnPlay, Range(1, 1000), Tooltip("ƒNƒŠƒbƒN‚µ‚Ä’u‚¯‚é‹…‚ÌÅ‘å”")]
+		[Header("ã‚¯ãƒªãƒƒã‚¯ã§è¿½åŠ ã™ã‚‹ãƒŽãƒ¼ãƒ‰ã®æœ€å¤§æ•°ï¼ˆâ–²ã‚²ãƒ¼ãƒ å®Ÿè¡Œä¸­å¤‰æ›´ä¸å¯â–²ï¼‰")]
+		[SerializeField, DisableEditOnPlay, Range(1, 1000), Tooltip("ã‚¯ãƒªãƒƒã‚¯ã—ã¦ç½®ã‘ã‚‹çƒã®æœ€å¤§æ•°")]
 		int maxAdditiveNodeNum = 200;
 		public int MaxAdditiveNodeNum => maxAdditiveNodeNum;
 

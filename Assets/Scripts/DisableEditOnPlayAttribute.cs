@@ -10,7 +10,7 @@ public class DisableEditOnPlayAttribute : PropertyAttribute
 
 public class DisableEditOnPlayDrawer : PropertyDrawer
 {
-	//ƒQ[ƒ€Às’†ƒOƒŒ[ƒAƒEƒg
+	//ã‚²ãƒ¼ãƒ å®Ÿè¡Œä¸­ã‚°ãƒ¬ãƒ¼ã‚¢ã‚¦ãƒˆ
 	public override void OnGUI(Rect aPosition, SerializedProperty aProperty, GUIContent aLabel)
 	{
 		EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);

@@ -1,10 +1,10 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 
 
 namespace IroSphere
 {
 	/// <summary>
-	/// ÉZÅ[ÉuÉfÅ[É^
+	/// „Çª„Éº„Éñ„Éá„Éº„Çø
 	/// </summary>
 	[CreateAssetMenu(menuName = "IroSphere/SaveData", fileName = "SaveData")]
 	public class SaveData : ScriptableObject

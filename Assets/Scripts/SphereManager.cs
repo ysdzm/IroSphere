@@ -270,8 +270,8 @@ namespace IroSphere
 		/// </summary>
 		void CreateInitNode()
 		{
-//			if (param.InitNodeNumH == 0 || param.InitNodeNumS == 0 || param.InitNodeNumL == 0)
-//				return;
+			if (param.InitNodeNumH == 0 || param.InitNodeNumS == 0 || param.InitNodeNumL == 0)
+				return;
 
 			int parentID = 0;
 
