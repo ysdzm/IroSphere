@@ -326,11 +326,9 @@ namespace IroSphere
 				HSL hsl = HSL.PositionToHSL(positions[i]);
 				Color rgb = hsl.ToRgb();
 
-				string rgb16 = ((int)(rgb.r * 255.0f)).ToString("x2") + ((int)(rgb.g * 255.0f)).ToString("x2") + ((int)(rgb.b * 255.0f)).ToString("x2");
-
 				csvSw.WriteLine(positions[i].x + "," + positions[i].y + "," + positions[i].z + "," +
 					hsl.h + "," + hsl.s + "," + hsl.l + "," +
-					(int)(rgb.r * 255.0f) + "," + (int)(rgb.g * 255.0f) + "," + (int)(rgb.b * 255.0f)+","+ rgb16);
+					(int)(rgb.r * 255.0f) + "," + (int)(rgb.g * 255.0f) + "," + (int)(rgb.b * 255.0f)+","+ Utility.ColorTo16(rgb));
 
 
 			}

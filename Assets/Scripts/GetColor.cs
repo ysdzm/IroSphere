@@ -52,6 +52,10 @@ namespace IroSphere
 							 mousePos.y >= imageCornerBottomLeft.y && imageCornerTopRight.y >= mousePos.y &&
 							 image.enabled);
 
+			bool isInScreen = (mousePos.x >= 0.0f && Screen.width >= mousePos.x &&
+							 mousePos.y >= 0.0f && Screen.height >= mousePos.y &&
+							 image.enabled);
+
 			//マウスポインタの画像上での位置比率
 			Vector2 onImagePosRatio;
 			if (isInImageRect)
@@ -65,8 +69,8 @@ namespace IroSphere
 				onImagePosRatio = Vector2.zero;
 			}
 
-			Color color = isInImageRect ? ReadPixels(mousePos) : Color.black;
-			sphereManager.UpdatePreviewNode(color, isInImageRect);
+			Color color = isInScreen ? ReadPixels(mousePos) : Color.black;
+			sphereManager.UpdatePreviewNode(color, isInImageRect,isInScreen);
 			sphereManager.UpdateInformation(isInImageRect, mousePos, color, onImagePosRatio);
 		}
 
@@ -117,7 +121,7 @@ namespace IroSphere
 					Random.Range(imageCornerBottomLeft.x, imageCornerTopRight.x),
 					Random.Range(imageCornerBottomLeft.y, imageCornerTopRight.y));
 				Color color = ReadPixels(pos);
-				sphereManager.UpdatePreviewNode(color, true);
+				sphereManager.UpdatePreviewNode(color, true,false);
 
 				if (!sphereManager.CreateAdditiveNode())
 					return;

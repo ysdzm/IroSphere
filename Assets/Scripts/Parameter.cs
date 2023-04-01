@@ -37,16 +37,16 @@ namespace IroSphere
 
 		[Header("初期配置ノードの個数（▲ゲーム実行中変更不可▲）")]
 
-		[SerializeField, DisableEditOnPlay, Range(1, 32), Tooltip("色相方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
+		[SerializeField, DisableEditOnPlay, Range(0, 32), Tooltip("色相方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumH = 21;
 		public int InitNodeNumH => initNodeNumH;
 
 
-		[SerializeField, DisableEditOnPlay, Range(1, 10), Tooltip("彩度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
+		[SerializeField, DisableEditOnPlay, Range(0, 10), Tooltip("彩度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumS = 7;
 		public int InitNodeNumS => initNodeNumS;
 
-		[SerializeField, DisableEditOnPlay, Range(1, 19), Tooltip("明度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
+		[SerializeField, DisableEditOnPlay, Range(0, 19), Tooltip("明度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumL = 15;
 		public int InitNodeNumL => initNodeNumL;
 
@@ -74,7 +74,7 @@ namespace IroSphere
 		public float AdditiveNodeSize => additiveNodeSize;
 
 		[Header("クリックで追加するノードの最大数（▲ゲーム実行中変更不可▲）")]
-		[SerializeField, DisableEditOnPlay, Range(1, 500), Tooltip("クリックして置ける球の最大数")]
+		[SerializeField, DisableEditOnPlay, Range(1, 1000), Tooltip("クリックして置ける球の最大数")]
 		int maxAdditiveNodeNum = 200;
 		public int MaxAdditiveNodeNum => maxAdditiveNodeNum;
 

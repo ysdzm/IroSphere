@@ -17,4 +17,14 @@ public static class Utility
 		return MathF.Abs(a - b) <= 0.004f;
 	}
 
+	/// <summary>
+	/// カラーをPhotoshopなどのパレットで扱える16進数形式に変換する
+	/// </summary>
+	/// <param name="color"></param>
+	/// <returns></returns>
+	public static string ColorTo16(Color color)
+	{
+		return ((int)(color.r * 255.0f)).ToString("x2") + ((int)(color.g * 255.0f)).ToString("x2") + ((int)(color.b * 255.0f)).ToString("x2");
+	}
+
 }

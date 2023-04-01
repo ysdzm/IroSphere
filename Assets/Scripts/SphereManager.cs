@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -144,7 +145,8 @@ namespace IroSphere
 		ShapeType pastShapeType;
 
 
-
+		Color previewColor;
+		bool isInScreen;
 
 		private void OnValidate()
 		{
@@ -231,6 +233,7 @@ namespace IroSphere
 			EnableInfomation();
 			ChangeShape();
 			ShowHelp();
+			CopyClipboard();
 		}
 
 		public bool CreateAdditiveNode()
@@ -267,6 +270,9 @@ namespace IroSphere
 		/// </summary>
 		void CreateInitNode()
 		{
+//			if (param.InitNodeNumH == 0 || param.InitNodeNumS == 0 || param.InitNodeNumL == 0)
+//				return;
+
 			int parentID = 0;
 
 			for (int k = 0; k < param.InitNodeNumL; k++)
@@ -333,8 +339,10 @@ namespace IroSphere
 		/// </summary>
 		/// <param name="color"></param>
 		/// <param name="isInImage"></param>
-		public void UpdatePreviewNode(Color color, bool isInImage)
+		public void UpdatePreviewNode(Color color, bool isInImage,bool isInScreen)
 		{
+			previewColor = color;
+			this.isInScreen = isInScreen;
 			color.a = previewSphereAlpha;
 			spheres[currentSphereID].UpdatePreviewNode(color, isInImage);
 		}
@@ -619,7 +627,7 @@ namespace IroSphere
 			{
 				HSL hsl = HSL.PositionToHSL(saveData.Position[i]);
 				Color color = hsl.ToRgb();
-				UpdatePreviewNode(color, true);
+				UpdatePreviewNode(color, true,false);
 
 				if (!CreateAdditiveNode())
 					return;
@@ -683,7 +691,8 @@ namespace IroSphere
 			infoTextRGB.text = (int)(color.r * 255) + "\n";
 			infoTextRGB.text += (int)(color.g * 255) + "\n";
 			infoTextRGB.text += (int)(color.b * 255) + "\n";
-			infoText.text = "# " + ((int)(color.r * 255.0f)).ToString("x2") + ((int)(color.g * 255.0f)).ToString("x2") + ((int)(color.b * 255.0f)).ToString("x2") + "\n\n" + 
+
+			infoText.text = "# " + Utility.ColorTo16(color) + "\n\n" + 
 				"Position : ( " + ((int)(onImagePosRatio.x * picture.rect.width)).ToString() + " , " + 
 				((int)(onImagePosRatio.y * picture.rect.height)).ToString() + " )\n";
 			HSL hsl = HSL.RGBToHSL(color);
@@ -698,5 +707,17 @@ namespace IroSphere
 				help.enabled = !help.enabled;
 		}
 
+		/// <summary>
+		/// 右クリックでクリップボードに16進数カラーをコピー
+		/// </summary>
+		void CopyClipboard()
+		{
+			if(isInScreen && Input.GetMouseButtonDown(1))
+			{
+				string color16 = Utility.ColorTo16(previewColor);
+				GUIUtility.systemCopyBuffer = color16;
+				Debug.Log(color16 + " copied to clipboard.");
+			}
+		}
 	}
 }
