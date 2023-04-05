@@ -20,6 +20,9 @@ namespace IroSphere
 		Sprite picture;
 		public Sprite Picture => picture;
 
+		[SerializeField, Range(0.0f,1.0f), Tooltip("画像の彩度（0で無彩色、1で元の画像）")]
+		float saturation = 1.0f;
+		public float Saturation => saturation;
 
 		[Header("パラメーター")]
 		[SerializeField, DisableEditOnPlay]
@@ -500,6 +503,9 @@ namespace IroSphere
 		/// </summary>
 		public void SetImage()
 		{
+			image.material.SetFloat("_Saturation", saturation);
+
+
 			if (image.sprite == picture)
 				return;
 

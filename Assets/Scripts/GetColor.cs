@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Linq;
 using UnityEngine.UI;
-
+using UnityEngine.Rendering;
 
 
 
@@ -40,8 +40,19 @@ namespace IroSphere
 			image = imageObj.GetComponent<Image>();
 			sphereManager.getColor = this;
 		}
+		private void Start()
+		{
+			RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+		}
+		void OnDestroy()
+		{
+			RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+		}
 
-		void OnPostRender()
+
+		//void OnPostRender()
+
+		void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
 		{
 			UpdateCorners();
 			RandomRead();
@@ -128,12 +139,33 @@ namespace IroSphere
 			}
 		}
 
-			public void UpdateCorners()
+		public void UpdateCorners()
 		{
 			var corners = new Vector3[4];
-			imageRectTrs.GetWorldCorners(corners);
+
+			//画像の範囲外のピクセルを取得してしまうため、一旦ローカル系で座標をだし、１ピクセル中に入れて、その後にワールド系に変換しています
+
+			imageRectTrs.GetLocalCorners(corners);
+
+			corners[0] += new Vector3(1.0f, 1.0f, 0.0f);
+			corners[1] += new Vector3(1.0f, -1.0f, 0.0f);
+			corners[2] += new Vector3(-1.0f, -1.0f, 0.0f);
+			corners[3] += new Vector3(-1.0f, 1.0f, 0.0f);
+
+			for (int i = 0; i < corners.Length; i++)
+			{
+				corners[i] = imageRectTrs.TransformPoint(corners[i]);
+			}
+
+
 			imageCornerBottomLeft = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[0]);
 			imageCornerTopRight = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[2]);
+
+			//ウィンドウサイズによっては画面の外をサンプリングしてしまう事がある為、切り取る
+			//Y軸は、画像の拡縮がかかる為、処理しなくても大丈夫
+			if(imageCornerBottomLeft.x < 1)
+				imageCornerBottomLeft.x = 1;
+
 		}
 	}
 }
