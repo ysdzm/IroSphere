@@ -108,7 +108,7 @@ namespace IroSphere
 		/// <param name="pos"></param>
 		public Color ReadPixels(Vector2 pos)
 		{
-			capture.ReadPixels(new Rect(pos.x, Screen.height - pos.y, 1, 1), 0, 0);
+			capture.ReadPixels(new Rect(pos.x, pos.y, 1, 1), 0, 0);
 			return capture.GetPixel((int)pos.x, (int)pos.y);
 		}
 
