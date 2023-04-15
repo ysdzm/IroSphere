@@ -19,7 +19,7 @@ namespace IroSphere
 		[Header("カラーピックしたい画像をここへ")]
 		[SerializeField, Tooltip("画像の設定をSprite(2D and UI)に変更するのをお忘れなく！")]
 		Sprite picture;
-		public Sprite Picture => picture;
+		public Sprite Picture { get => picture; set => picture = value; }
 
 		[SerializeField, Range(0.0f,1.0f), Tooltip("画像の彩度（0で無彩色、1で元の画像）")]
 		float saturation = 1.0f;
