@@ -726,6 +726,8 @@ namespace IroSphere
 				string color16 = Utility.ColorTo16(previewColor);
 				GUIUtility.systemCopyBuffer = color16;
 				Debug.Log(color16 + " copied to clipboard.");
+
+				NativeUtils.CopyToClipboard(color16);
 			}
 		}
 	}
