@@ -1,7 +1,9 @@
 ﻿using IroSphere;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using static IroSphere.SphereManager;
 
@@ -82,6 +84,7 @@ namespace IroSphere
 
 		public SphereManager manager { get; set; }
 
+#if UNITY_EDITOR
 		private void OnValidate()
 		{
 			if (!EditorApplication.isPlaying || manager == null)
@@ -89,6 +92,7 @@ namespace IroSphere
 
 			manager.ChangeNodeSize();
 		}
+#endif
 
 	}
 }

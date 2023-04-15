@@ -1,5 +1,6 @@
-﻿using UnityEditor;
-using UnityEditor.Playables;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -151,6 +152,7 @@ namespace IroSphere
 		Color previewColor;
 		bool isInScreen;
 
+#if UNITY_EDITOR
 		private void OnValidate()
 		{
 			param.manager = this;
@@ -158,6 +160,7 @@ namespace IroSphere
 			if (!EditorApplication.isPlaying)
 				return;
 		}
+#endif
 
 		private void Start()
 		{

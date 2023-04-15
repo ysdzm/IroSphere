@@ -1,11 +1,14 @@
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 
 public class DisableEditOnPlayAttribute : PropertyAttribute
 {
 }
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(DisableEditOnPlayAttribute))]
 
 public class DisableEditOnPlayDrawer : PropertyDrawer
@@ -18,3 +21,4 @@ public class DisableEditOnPlayDrawer : PropertyDrawer
 		EditorGUI.EndDisabledGroup();
 	}
 }
+#endif

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using static IroSphere.SphereManager;
 using System.IO;
@@ -333,9 +335,11 @@ namespace IroSphere
 
 			}
 
+#if UNITY_EDITOR
 			//ScriptableObject保存
 			saveData.Position = positions;
 			AssetDatabase.CreateAsset(saveData, path + fileName + ".asset");
+#endif
 
 			//CSV保存
 			csvSw.Flush();
