@@ -20,9 +20,14 @@ namespace IroSphere
 		Sprite picture;
 		public Sprite Picture => picture;
 
+		[SerializeField, Range(-1.0f, 1.0f), Tooltip("赤色補正（デフォルト値：0）")]
+		float r = 0.0f;
+		[SerializeField, Range(-1.0f, 1.0f), Tooltip("緑色補正（デフォルト値：0）")]
+		float g = 0.0f;
+		[SerializeField, Range(-1.0f, 1.0f), Tooltip("青色補正（デフォルト値：0）")]
+		float b = 0.0f;
 		[SerializeField, Range(0.0f,1.0f), Tooltip("画像の彩度（0で無彩色、1で元の画像）")]
 		float saturation = 1.0f;
-		public float Saturation => saturation;
 
 		[Header("パラメーター")]
 		[SerializeField, DisableEditOnPlay]
@@ -503,6 +508,10 @@ namespace IroSphere
 		/// </summary>
 		public void SetImage()
 		{
+			image.material.SetFloat("_R", r);
+			image.material.SetFloat("_G", g);
+			image.material.SetFloat("_B", b);
+
 			image.material.SetFloat("_Saturation", saturation);
 
 
