@@ -344,6 +344,7 @@ namespace IroSphere
 			//CSV保存
 			csvSw.Flush();
 			csvSw.Close();
+			NativeUtils.ExportFile(fileName + ".csv", "text/csv", File.ReadAllBytes(csvFI.FullName));
 			return true;
 		}
 	}
