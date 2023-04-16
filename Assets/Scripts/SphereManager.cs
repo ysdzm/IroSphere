@@ -1,5 +1,6 @@
-﻿using UnityEditor;
-using UnityEditor.Playables;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,7 +19,7 @@ namespace IroSphere
 		[Header("カラーピックしたい画像をここへ")]
 		[SerializeField, Tooltip("画像の設定をSprite(2D and UI)に変更するのをお忘れなく！")]
 		Sprite picture;
-		public Sprite Picture => picture;
+		public Sprite Picture { get => picture; set => picture = value; }
 
 		[SerializeField, Range(-1.0f, 1.0f), Tooltip("赤色補正（デフォルト値：0）")]
 		float r = 0.0f;
@@ -156,6 +157,7 @@ namespace IroSphere
 		Color previewColor;
 		bool isInScreen;
 
+#if UNITY_EDITOR
 		private void OnValidate()
 		{
 			param.manager = this;
@@ -163,6 +165,7 @@ namespace IroSphere
 			if (!EditorApplication.isPlaying)
 				return;
 		}
+#endif
 
 		private void Start()
 		{
@@ -732,6 +735,8 @@ namespace IroSphere
 				string color16 = Utility.ColorTo16(previewColor);
 				GUIUtility.systemCopyBuffer = color16;
 				Debug.Log(color16 + " copied to clipboard.");
+
+				NativeUtils.CopyToClipboard(color16);
 			}
 		}
 	}
