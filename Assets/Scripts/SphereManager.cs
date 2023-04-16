@@ -117,8 +117,10 @@ namespace IroSphere
 		Rect moveSphereLimit = new Rect(-4, -2, 6, 4);
 
 		//インフォメーションウィンドウの高さ
-		[SerializeField]
-		int infoWindowHeight = 150;
+		int infoWindowHeight = 160;
+
+		//インフォメーションウィンドウの幅
+		int infoWindowWidth = 230;
 
 
 		public GetColor getColor { get; set; }
@@ -691,8 +693,14 @@ namespace IroSphere
 				mousePos.y = Screen.height - infoWindowHeight;
 			}
 
-//			mousePos = Vector2.zero;
-//			color = Color.white;
+			if (mousePos.x > Screen.width - infoWindowWidth)
+			{
+				mousePos.x = Screen.width - infoWindowWidth;
+			}
+
+
+			//			mousePos = Vector2.zero;
+			//			color = Color.white;
 
 			infoRectBG.position = mousePos;
 			infoTextRectRGB.position = mousePos;
@@ -739,5 +747,24 @@ namespace IroSphere
 				NativeUtils.CopyToClipboard(color16);
 			}
 		}
+
+		public void OnSliderSaturationChanged(Slider slider)
+		{
+			saturation = slider.value;
+		}
+
+		public void OnSliderRChanged(Slider slider)
+		{
+			r = slider.value;
+		}
+		public void OnSliderGChanged(Slider slider)
+		{
+			g = slider.value;
+		}
+		public void OnSliderBChanged(Slider slider)
+		{
+			b = slider.value;
+		}
+
 	}
 }

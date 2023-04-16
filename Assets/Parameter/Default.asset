@@ -24,4 +24,4 @@ MonoBehaviour:
   initNodeCenterSmall: 1
   previewNodeSize: 0.3
   additiveNodeSize: 0.2
-  maxAdditiveNodeNum: 300
+  maxAdditiveNodeNum: 500
