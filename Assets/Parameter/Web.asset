@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c412c629c250c14ba3b932115fb0854, type: 3}
-  m_Name: Default
+  m_Name: Web
   m_EditorClassIdentifier: 
   rotateSpeed: 50
   moveSpeed: 2
-  scaleSpeed: 2
+  scaleSpeed: 19
   shapeType: 0
-  initNodeNumH: 23
+  initNodeNumH: 28
   initNodeNumS: 1
-  initNodeNumL: 15
-  initNodeSize: 0.02
+  initNodeNumL: 19
+  initNodeSize: 0.03533666
   initNodeCenterSmall: 1
   previewNodeSize: 0.3
   additiveNodeSize: 0.2

@@ -242,6 +242,18 @@ namespace IroSphere
 			}
 			AdditiveNodes.Clear();
 		}
+		/// <summary>
+		/// 全ての追加ノードの削除
+		/// </summary>
+		public void ClearAllInitNode()
+		{
+			foreach (GameObject g in InitNodes)
+			{
+				GameObject.Destroy(g);
+			}
+			InitNodes.Clear();
+		}
+
 
 		/// <summary>
 		/// 実行中のノードサイズ変更

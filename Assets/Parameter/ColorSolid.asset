@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c412c629c250c14ba3b932115fb0854, type: 3}
   m_Name: ColorSolid
   m_EditorClassIdentifier: 
-  rotateSpeed: 200
-  rotateBrake: 3
+  rotateSpeed: 50
   moveSpeed: 2
   scaleSpeed: 2
   shapeType: 1

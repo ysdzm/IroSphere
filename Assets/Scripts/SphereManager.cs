@@ -84,7 +84,8 @@ namespace IroSphere
 		Image help;
 		[SerializeField]
 		Image saved;
-
+		[SerializeField]
+		bool isWeb;
 
 		RectTransform infoTextRect;
 		Text infoText;
@@ -133,7 +134,7 @@ namespace IroSphere
 		RectTransform ImageRect;
 
 		Vector2 rotate;
-		Vector2 rotateVelocity;
+//		Vector2 rotateVelocity;
 		float scale = 1.0f;
 
 		Vector3 pastMousePos;
@@ -324,6 +325,14 @@ namespace IroSphere
 				}
 			}
 		}
+		void ClearInitNodes()
+		{
+			for(int i = 0; i < spheres.Length; i++)
+			{
+				spheres[i].ClearAllInitNode();
+			}
+		}
+
 
 		/// <summary>
 		/// ゲーム起動時にスフィア達の親作成
@@ -386,9 +395,11 @@ namespace IroSphere
 		/// </summary>
 		void RotateSphere()
 		{
-			rotateVelocity += new Vector2(Input.GetAxis("RotateHorizontal"), -Input.GetAxis("RotateVertical")) * Time.deltaTime * param.RotateSpeed;
-			rotateVelocity /= (1.0f + param.RotateBrake * Time.deltaTime);
-			rotate += rotateVelocity * Time.deltaTime;
+//			rotateVelocity = new Vector2(Input.GetAxis("RotateHorizontal"), -Input.GetAxis("RotateVertical")) * param.RotateSpeed;
+
+			//			rotateVelocity += new Vector2(Input.GetAxis("RotateHorizontal"), -Input.GetAxis("RotateVertical")) * Time.deltaTime * param.RotateSpeed;
+			//			rotateVelocity /= (1.0f + param.RotateBrake * Time.deltaTime);
+			rotate += new Vector2(Input.GetAxis("RotateHorizontal"), -Input.GetAxis("RotateVertical")) * param.RotateSpeed * Time.deltaTime;
 			if (rotate.x > 180.0f)
 				rotate.x -= 360.0f;
 			else if (rotate.x < -180.0f)
@@ -397,12 +408,12 @@ namespace IroSphere
 			if (rotate.y < -89.9f)
 			{
 				rotate.y = -89.9f;
-				rotateVelocity.y = 0.0f;
+			//	rotateVelocity.y = 0.0f;
 			}
 			if (rotate.y > 89.9f)
 			{
 				rotate.y = 89.9f;
-				rotateVelocity.y = 0.0f;
+			//	rotateVelocity.y = 0.0f;
 			}
 
 			Quaternion r = Quaternion.AngleAxis(rotate.y, Vector3.right) * Quaternion.AngleAxis(rotate.x, Vector3.up);
@@ -764,6 +775,60 @@ namespace IroSphere
 		public void OnSliderBChanged(Slider slider)
 		{
 			b = slider.value;
+		}
+
+		public void OnSliderInitNodeSize(Slider slider)
+		{
+			param.InitNodeSize = slider.value;
+			ChangeNodeSize();
+		}
+
+		public void OnSliderInitCenterSmall(Slider slider)
+		{
+			param.InitNodeCenterSmall = slider.value;
+			ChangeNodeSize();
+		}
+
+		public void OnSliderRotateSpeed(Slider slider)
+		{
+			param.RotateSpeed = slider.value;
+		}
+		public void OnSliderMoveSpeed(Slider slider)
+		{
+			param.MoveSpeed = slider.value;
+		}
+		public void OnSliderScaleSpeed(Slider slider)
+		{
+			param.ScaleSpeed = slider.value;
+		}
+		public void OnDropdownShapeType(Dropdown dropdown)
+		{
+			if (dropdown.value == 0)
+				param.ShapeType = ShapeType.SPHERE;
+			else if (dropdown.value == 1)
+				param.ShapeType = ShapeType.BOX;
+		}
+		public void OnSliderInitNodeNumH(Slider slider)
+		{
+			param.InitNodeNumH = (int)slider.value;
+		}
+		public void OnSliderInitNodeNumS(Slider slider)
+		{
+			param.InitNodeNumS = (int)slider.value;
+		}
+		public void OnSliderInitNodeNumL(Slider slider)
+		{
+			param.InitNodeNumL = (int)slider.value;
+		}
+		public void OnButtonResetInitNodes()
+		{
+			ClearInitNodes();
+			CreateInitNode();
+		}
+
+		public void OnResetAll()
+		{
+
 		}
 
 	}

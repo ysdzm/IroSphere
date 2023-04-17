@@ -18,49 +18,45 @@ namespace IroSphere
 		[Header("スフィアの回転、移動、拡縮性能")]
 		[SerializeField, Tooltip("角加速度")]
 		float rotateSpeed = 200.0f;
-		public float RotateSpeed => rotateSpeed;
-		
-		[SerializeField, Tooltip("角速度ブレーキング性能")]
-		float rotateBrake = 3.0f;
-		public float RotateBrake => rotateBrake;
-		
+		public float RotateSpeed { get { return rotateSpeed; } set { rotateSpeed = value; } }
+
 		[SerializeField, Tooltip("移動速度")]
 		float moveSpeed = 2.0f;
-		public float MoveSpeed => moveSpeed;
+		public float MoveSpeed { get { return moveSpeed; } set { moveSpeed = value; } }
 
 		[SerializeField, Tooltip("拡縮速度")]
 		float scaleSpeed = 2.0f;
-		public float ScaleSpeed => scaleSpeed;
+		public float ScaleSpeed { get { return scaleSpeed; } set { scaleSpeed = value; } }
 
 		[Header("ノード形状タイプ")]
 		[SerializeField, Tooltip("形状タイプ")]
 		ShapeType shapeType = ShapeType.SPHERE;
-		public ShapeType ShapeType => shapeType;
+		public ShapeType ShapeType { get { return shapeType; } set { shapeType = value; } }
 
 		[Header("初期配置ノードの個数（▲ゲーム実行中変更不可▲）")]
 
 		[SerializeField, DisableEditOnPlay, Range(0, 32), Tooltip("色相方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumH = 21;
-		public int InitNodeNumH => initNodeNumH;
+		public int InitNodeNumH { get { return initNodeNumH; } set { initNodeNumH = value; } }
 
 
 		[SerializeField, DisableEditOnPlay, Range(0, 10), Tooltip("彩度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumS = 7;
-		public int InitNodeNumS => initNodeNumS;
+		public int InitNodeNumS { get { return initNodeNumS; } set { initNodeNumS = value; } }
 
 		[SerializeField, DisableEditOnPlay, Range(0, 19), Tooltip("明度方向のノードの数。動作が重たいと感じたらここを下げて下さい")]
 		int initNodeNumL = 15;
-		public int InitNodeNumL => initNodeNumL;
+		public int InitNodeNumL { get { return initNodeNumL; } set { initNodeNumL= value; } }
 
 		[Header("初期配置のノードのサイズ")]
 
 		[SerializeField, Range(0.0f, 1.0f), Tooltip("初期配置ノードのサイズ")]
 		float initNodeSize = 0.02f;
-		public float InitNodeSize => initNodeSize;
+		public float InitNodeSize { get { return initNodeSize; } set { initNodeSize = value; } }
 
 		[SerializeField, Range(0.0f, 1.0f), Tooltip("スフィアの中心方向に行くに従って小さくするかどうか")]
 		float initNodeCenterSmall = 1;
-		public float InitNodeCenterSmall => initNodeCenterSmall;
+		public float InitNodeCenterSmall { get { return initNodeCenterSmall; } set { initNodeCenterSmall = value; } }
 
 		[Header("プレビュー用ノードのサイズ")]
 
@@ -83,6 +79,7 @@ namespace IroSphere
 
 
 		public SphereManager manager { get; set; }
+
 
 #if UNITY_EDITOR
 		private void OnValidate()

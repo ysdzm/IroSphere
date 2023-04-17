@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c412c629c250c14ba3b932115fb0854, type: 3}
   m_Name: HolotypeRing
   m_EditorClassIdentifier: 
-  rotateSpeed: 200
-  rotateBrake: 3
+  rotateSpeed: 50
   moveSpeed: 2
   scaleSpeed: 2
-  shapeType: 1
+  shapeType: 0
   initNodeNumH: 25
   initNodeNumS: 4
   initNodeNumL: 1
