@@ -22,8 +22,35 @@ mergeInto(LibraryManager.library, {
 	},
 
 	copyToClipboard: function (text) {
-		navigator.clipboard.writeText(UTF8ToString(text)).catch(() => {
-			console.error("Failed to copy to clipboard.")
-		});
+		const value = UTF8ToString(text)
+		if (navigator.clipboard) {
+			navigator.clipboard.writeText(value).catch(() => {
+				execCopy();
+			});
+		} else {
+			execCopy();
+		}
+
+		function execCopy() {
+			if (document.execCommand) {
+				const input = document.createElement('input');
+				input.setAttribute('type', 'text')
+				input.setAttribute('value', value)
+
+				document.body.appendChild(input);
+				input.select();
+				const success = document.execCommand('copy');
+				document.body.removeChild(input);
+				if (!success) {
+					error();
+				}
+			} else {
+				error();
+			}
+
+			function error() {
+				console.error('Failed to copy to clipboard.');
+			}
+		}
 	}
 });
