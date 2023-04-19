@@ -10,6 +10,7 @@
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.7.3",
     "com.unity.ugui": "1.0.0",
+    "io.github.ruccho.blobio": "https://github.com/ruccho/BlobIO.git?path=/Packages/io.github.ruccho.blobio",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",

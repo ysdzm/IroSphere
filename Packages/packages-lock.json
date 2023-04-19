@@ -142,6 +142,13 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "io.github.ruccho.blobio": {
+      "version": "https://github.com/ruccho/BlobIO.git?path=/Packages/io.github.ruccho.blobio",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "3532f612111e69f290e59525f2063daff3f57e6e"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
