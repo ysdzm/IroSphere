@@ -15,7 +15,7 @@ namespace Ruccho.BlobIO.Examples
 
         private void Start()
         {
-            BlobIO.Initialize(overlayMessage, overlayCancelLabel);
+            // BlobIO.Initialize(overlayMessage, overlayCancelLabel);
         }
 
         public void Load()
