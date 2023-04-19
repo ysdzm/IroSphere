@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "acorn-globals": "^7.0.1"
+  }
+}
