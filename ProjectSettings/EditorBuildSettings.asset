@@ -11,7 +11,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/WebGLTest.unity
     guid: 6f9e9c1ae564f3e42a41f2795966c1d8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BlobIOTest.unity
     guid: 9de048f24514d8c4cb84496290c0254c
+  - enabled: 1
+    path: Assets/Scenes/WebGLVRMLoad.unity
+    guid: c2701e7047012a6479bb95819fe77a87
   m_configObjects: {}
