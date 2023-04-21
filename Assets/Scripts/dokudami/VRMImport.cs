@@ -18,10 +18,7 @@ namespace UniVRM10.VRM10Viewer
 
         [SerializeField]
         public Button LoadButton;
-        public Button StartButton;
         public GameObject AvatarPos;
-        public GameObject ReAvatar;
-        public AudioClip SE;
 
         public bool VrmLoadFlag = false;
 
@@ -31,7 +28,6 @@ namespace UniVRM10.VRM10Viewer
 #if !(UNITY_WEBGL && !UNITY_EDITOR)
             LoadButton.onClick.AddListener(On_LoadFileSelect);
 #endif
-            
             VrmLoadFlag = true;
 
         }
@@ -80,7 +76,6 @@ namespace UniVRM10.VRM10Viewer
             var paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions,    false);
             if (paths.Length > 0 && paths[0].Length > 0)
             {
-    
                 StartCoroutine(Load(new System.Uri(paths[0]).AbsoluteUri));
                 VrmLoadFlag = true;
             }
@@ -105,9 +100,7 @@ namespace UniVRM10.VRM10Viewer
     
         public async void LoadVRMClicked(Byte[] url)
         {
-    
             var path = url;
-
             var instance = await LoadAsync(path, new VRMShaders.RuntimeOnlyNoThreadAwaitCaller());
     
             Transform AvatarCount = AvatarPos.GetComponentInChildren<Transform>();
