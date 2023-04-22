@@ -343,6 +343,7 @@ PlayerSettings:
   openGLRequireES32: 0
   m_TemplateCustomTags:
     PRODUCT_DESCRIPTION: 
+    SHOW_DIAGNOSTICS: 
     WORKER_FILENAME: 
   mobileMTRendering:
     Android: 1
@@ -591,7 +592,7 @@ PlayerSettings:
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: APPLICATION:Default
+  webGLTemplate: PROJECT:Default_Droppable
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 1

@@ -9,7 +9,7 @@
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=1280 height=720></canvas>
+      <canvas id="unity-canvas" width=1280 height=720 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -24,6 +24,7 @@
       </div>
     </div>
     <script>
+
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
@@ -89,7 +90,7 @@
         // performance, uncomment the following line:
         // config.devicePixelRatio = 1;
 
-        unityShowBanner('WebGL builds are not supported on mobile devices.');
+
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
 
@@ -104,16 +105,41 @@
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
           progressBarFull.style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-          loadingBar.style.display = "none";
-          fullscreenButton.onclick = () => {
-            unityInstance.SetFullscreen(1);
-          };
-        }).catch((message) => {
-          alert(message);
-        });
-      };
+              }).then((unityInstance) => {
+                loadingBar.style.display = "none";
+                fullscreenButton.onclick = () => {
+                  unityInstance.SetFullscreen(1);
+                };
+                window.unityInstance = unityInstance;
+              }).catch((message) => {
+                alert(message);
+              });
+            };
+
       document.body.appendChild(script);
+
+      let image = new Image();
+
+      canvas.addEventListener("dragover", function (event) {
+        event.preventDefault();
+      });
+
+      canvas.addEventListener("drop", function(event) {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(event) {
+          image.name = file.name.split('.').slice(0, -1).join('.');
+          image.src = event.target.result;
+        };
+      });
+
+      image.onload = function() {
+        const prop = { name:image.name, width: image.width, height: image.height };
+        unityInstance.SendMessage("PictureLoader", "SetPicture", JSON.stringify(prop));
+      }
+
     </script>
   </body>
 </html>
