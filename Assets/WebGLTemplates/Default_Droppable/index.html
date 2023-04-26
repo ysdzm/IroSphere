@@ -172,8 +172,13 @@
 
         if(file.name.endsWith('.vrm'))
         {
-          const reader = new FileReader();
-          reader.onLoad = function() {
+          console.log("it is vrm file.")
+          let reader = new FileReader();
+          console.log("hoge 1");
+
+          /*
+          reader.onLoad = function(event) {
+            console.log("hoge 3");
             let source = this.result;
             let bytes = new Uint8Array(source);
             let len = source.byteLength;
@@ -181,9 +186,35 @@
             for(var i=0 ; i < len ; i++ ){
               bytes += String.fromCharCode(bytes[i]);
             }
+            console.log(bytes);
             var base64String = window.btoa(byteString);
             sendUnity(base64String);
           };
+
+          */
+          reader.onload = function() {  
+
+            let source = this.result; 
+            var bytes = new Uint8Array(this.result);
+            console.log(bytes);
+
+            unityInstance.SendMessage("VRMLoader", "Test", bytes);
+            
+            /*
+            let len = source.byteLength;
+            console.log(len);
+            let byteString = "";
+            for(var i=0 ; i < len ; i++ ){
+              console.log(i);
+              bytes += String.fromCharCode(bytes[i]);
+            }
+            console.log(byteString);
+            */
+          }
+
+          reader.readAsArrayBuffer(file);
+
+          console.log("hoge 2");
           // unityInstance.SendMessage("VRMLoader","OnFileUpload",event.target.result);
         }
         else
@@ -212,14 +243,17 @@
         let splitLength = 1000
         let len = parseInt(base64String.length / splitLength)
         unityInstance.SendMessage("VRMLoader", "ByteLength", len + 1)
+        console.log(1);
         for (let i = 0; i < len; i++) {
             let next = base64String.substr(i * splitLength, splitLength)
             unityInstance.SendMessage("VRMLoader", "AddRange", next)
         }
+        console.log(2);
         let last = base64String.substr(
             splitLength * len,
             base64String.length % splitLength
         )
+        console.log(3);
         unityInstance.SendMessage("VRMLoader", "AddRange", last)
       }
 

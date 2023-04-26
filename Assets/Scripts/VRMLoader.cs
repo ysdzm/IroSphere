@@ -22,11 +22,19 @@ public class VRMLoader : MonoBehaviour
 
     public void AddRange(string byteString)
     {
+        Debug.Log("AddRange");
+        // Debug.Log(byteString);
         var decode = Convert.FromBase64String(byteString);
         byteContent.AddRange(decode);
         index += 1;
         if (length != index) return;
+        Debug.Log("Spawn");
         Spawn();
+    }
+
+    public void Test(byte[] hoge)
+    {
+        Debug.Log(hoge);
     }
 
     public async void Spawn()
@@ -39,7 +47,7 @@ public class VRMLoader : MonoBehaviour
         // context.EnableUpdateWhenOffscreen();
         var instance = await Vrm10.LoadBytesAsync(vrmBytes, awaitCaller: new VRMShaders.RuntimeOnlyNoThreadAwaitCaller());
         var root = instance.gameObject;
-        root.transform.position = new Vector3(0,0,0);
+        root.transform.position = new Vector3(0, 0, 0);
         root.transform.rotation = Quaternion.identity;
     }
 
@@ -54,7 +62,7 @@ public class VRMLoader : MonoBehaviour
     {
         UnityWebRequest webRequest = UnityWebRequest.Get(url);
         yield return webRequest.SendWebRequest();
-        if(webRequest.isNetworkError)
+        if (webRequest.isNetworkError)
         {
             // エラー処理
             yield break;
@@ -68,13 +76,13 @@ public class VRMLoader : MonoBehaviour
         var path = url;
         var instance = await LoadAsync(path, new VRMShaders.RuntimeOnlyNoThreadAwaitCaller());
         var root = instance.gameObject;
-        root.transform.position = new Vector3(0,0,0);
+        root.transform.position = new Vector3(0, 0, 0);
         root.transform.rotation = Quaternion.identity;
     }
 
-    async Task<Vrm10Instance> LoadAsync(Byte[] path,VRMShaders.IAwaitCaller awaitCaller)
+    async Task<Vrm10Instance> LoadAsync(Byte[] path, VRMShaders.IAwaitCaller awaitCaller)
     {
-        var instance = await Vrm10.LoadBytesAsync(path,awaitCaller: awaitCaller);
+        var instance = await Vrm10.LoadBytesAsync(path, awaitCaller: awaitCaller);
         return instance;
     }
 }
