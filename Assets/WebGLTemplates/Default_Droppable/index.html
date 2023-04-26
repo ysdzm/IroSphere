@@ -153,27 +153,74 @@
             };
 
       document.body.appendChild(script);
-
+      
+      // 新しいイメージオブジェクトを生成
       let image = new Image();
-
+      let path = "";
+      
+      // ドラッグオーバーされたときのイベントを追加
       canvas.addEventListener("dragover", function (event) {
+        // デフォルトの動作をキャンセルする
         event.preventDefault();
       });
 
+      // ドロップされたときのイベントを追加
       canvas.addEventListener("drop", function(event) {
+        // デフォルトの動作をキャンセルする
         event.preventDefault();
         const file = event.dataTransfer.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function(event) {
-          image.name = file.name.split('.').slice(0, -1).join('.');
-          image.src = event.target.result;
-        };
+
+        if(file.name.endsWith('.vrm'))
+        {
+          const reader = new FileReader();
+          reader.onLoad = function() {
+            let source = this.result;
+            let bytes = new Uint8Array(source);
+            let len = source.byteLength;
+            let byteString = "";
+            for(var i=0 ; i < len ; i++ ){
+              bytes += String.fromCharCode(bytes[i]);
+            }
+            var base64String = window.btoa(byteString);
+            sendUnity(base64String);
+          };
+          // unityInstance.SendMessage("VRMLoader","OnFileUpload",event.target.result);
+        }
+        else
+        {
+          const reader = new FileReader();
+          // ファイルをデータURIとして読み込む
+          reader.readAsDataURL(file);
+          reader.onload = function(event) {
+            image.name = file.name.split('.').slice(0, -1).join('.');
+            image.src = event.target.result;
+            console.log(image.name);
+            console.log(image.src);
+          };
+        }
       });
 
+      // イメージオブジェクトが読み込まれた時
       image.onload = function() {
         const prop = { name:image.name, width: image.width, height: image.height };
+        // PictureLoader の SetPicture を呼び出している
         unityInstance.SendMessage("PictureLoader", "SetPicture", JSON.stringify(prop));
+      }
+
+      function sendUnity(base64String) {
+        // stringの容量が大きいままSendMessageに渡そうとするとエラーが起きるので文字列を分割する
+        let splitLength = 1000
+        let len = parseInt(base64String.length / splitLength)
+        unityInstance.SendMessage("VRMLoader", "ByteLength", len + 1)
+        for (let i = 0; i < len; i++) {
+            let next = base64String.substr(i * splitLength, splitLength)
+            unityInstance.SendMessage("VRMLoader", "AddRange", next)
+        }
+        let last = base64String.substr(
+            splitLength * len,
+            base64String.length % splitLength
+        )
+        unityInstance.SendMessage("VRMLoader", "AddRange", last)
       }
 
     </script>
