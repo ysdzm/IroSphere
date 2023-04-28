@@ -176,40 +176,26 @@
           let reader = new FileReader();
           console.log("hoge 1");
 
-          /*
-          reader.onLoad = function(event) {
-            console.log("hoge 3");
+          reader.onload = function() {
+
             let source = this.result;
-            let bytes = new Uint8Array(source);
-            let len = source.byteLength;
-            let byteString = "";
-            for(var i=0 ; i < len ; i++ ){
-              bytes += String.fromCharCode(bytes[i]);
-            }
-            console.log(bytes);
-            var base64String = window.btoa(byteString);
-            sendUnity(base64String);
-          };
-
-          */
-          reader.onload = function() {  
-
-            let source = this.result; 
+            console.log(source); 
             var bytes = new Uint8Array(this.result);
             console.log(bytes);
 
-            unityInstance.SendMessage("VRMLoader", "Test", bytes);
-            
-            /*
-            let len = source.byteLength;
-            console.log(len);
-            let byteString = "";
-            for(var i=0 ; i < len ; i++ ){
-              console.log(i);
-              bytes += String.fromCharCode(bytes[i]);
+            let len = source.byteLength
+            let byteString = ""
+            for (var i = 0; i < len; i++) {
+              byteString += String.fromCharCode(bytes[i])
             }
             console.log(byteString);
-            */
+            // バイナリー文字列からエンコードされた ASCII 文字列を生成
+            var base64String = window.btoa(byteString)
+            console.log(base64String);
+
+            sendUnity(base64String)
+            
+            // unityInstance.SendMessage("VRMLoader", "Test", bytes);
           }
 
           reader.readAsArrayBuffer(file);
@@ -239,9 +225,11 @@
       }
 
       function sendUnity(base64String) {
+
         // stringの容量が大きいままSendMessageに渡そうとするとエラーが起きるので文字列を分割する
         let splitLength = 1000
         let len = parseInt(base64String.length / splitLength)
+        console.log(len);
         unityInstance.SendMessage("VRMLoader", "ByteLength", len + 1)
         console.log(1);
         for (let i = 0; i < len; i++) {
@@ -255,6 +243,7 @@
         )
         console.log(3);
         unityInstance.SendMessage("VRMLoader", "AddRange", last)
+
       }
 
     </script>

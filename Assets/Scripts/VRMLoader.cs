@@ -22,13 +22,10 @@ public class VRMLoader : MonoBehaviour
 
     public void AddRange(string byteString)
     {
-        Debug.Log("AddRange");
-        // Debug.Log(byteString);
         var decode = Convert.FromBase64String(byteString);
         byteContent.AddRange(decode);
         index += 1;
         if (length != index) return;
-        Debug.Log("Spawn");
         Spawn();
     }
 
@@ -40,22 +37,11 @@ public class VRMLoader : MonoBehaviour
     public async void Spawn()
     {
         var vrmBytes = byteContent.ToArray();
-        // var context = new VRMImporterContext();
-        // context.ParseGlb(vrmBytes);
-        // context.Load();
-        // context.ShowMeshes();
-        // context.EnableUpdateWhenOffscreen();
-        var instance = await Vrm10.LoadBytesAsync(vrmBytes, awaitCaller: new VRMShaders.RuntimeOnlyNoThreadAwaitCaller());
+        // URP 対応 ロード
+        var instance = await Vrm10.LoadBytesAsync(vrmBytes, awaitCaller: new VRMShaders.RuntimeOnlyNoThreadAwaitCaller(),materialGenerator: new UrpVrm10MaterialDescriptorGenerator());
         var root = instance.gameObject;
-        root.transform.position = new Vector3(0, 0, 0);
-        root.transform.rotation = Quaternion.identity;
-    }
-
-    public void OnFileUpload(string url)
-    {
-        Debug.Log("hello,VRMLoader");
-        Debug.Log(url);
-        // StartCoroutine(Load(url));
+        root.transform.position = new Vector3(-2, -1f, 0);
+        root.transform.rotation = Quaternion.Euler(0,180,0);
     }
 
     private IEnumerator Load(string url)
