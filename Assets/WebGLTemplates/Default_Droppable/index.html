@@ -153,26 +153,46 @@
             };
 
       document.body.appendChild(script);
-
+      
+      // 新しいイメージオブジェクトを生成
       let image = new Image();
-
+      
+      // ドラッグオーバーされたときのイベントを追加
       canvas.addEventListener("dragover", function (event) {
+        // デフォルトの動作をキャンセルする
         event.preventDefault();
       });
 
+      // ドロップされたときのイベントを追加
       canvas.addEventListener("drop", function(event) {
+        // デフォルトの動作をキャンセルする
         event.preventDefault();
+
         const file = event.dataTransfer.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function(event) {
-          image.name = file.name.split('.').slice(0, -1).join('.');
-          image.src = event.target.result;
-        };
+
+        if(file.name.endsWith('.vrm'))
+        {
+          let blob_url = window.URL.createObjectURL(file);
+          unityInstance.SendMessage("VRMLoader", "LoadFromURL" , blob_url);
+        }
+        else
+        {
+          const reader = new FileReader();
+          // ファイルをデータURIとして読み込む
+          reader.readAsDataURL(file);
+          reader.onload = function(event) {
+            image.name = file.name.split('.').slice(0, -1).join('.');
+            image.src = event.target.result;
+            console.log(image.name);
+            console.log(image.src);
+          };
+        }
       });
 
+      // イメージオブジェクトが読み込まれた時
       image.onload = function() {
         const prop = { name:image.name, width: image.width, height: image.height };
+        // PictureLoader の SetPicture を呼び出している
         unityInstance.SendMessage("PictureLoader", "SetPicture", JSON.stringify(prop));
       }
 
