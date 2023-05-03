@@ -172,11 +172,13 @@
 
         if(file.name.endsWith('.vrm'))
         {
+          unityInstance.SendMessage("UISwitcher", "Switch" , "vrm");
           let blob_url = window.URL.createObjectURL(file);
           unityInstance.SendMessage("VRMLoader", "LoadFromURL" , blob_url);
         }
         else
         {
+          unityInstance.SendMessage("UISwitcher", "Switch" , "image");
           const reader = new FileReader();
           // ファイルをデータURIとして読み込む
           reader.readAsDataURL(file);

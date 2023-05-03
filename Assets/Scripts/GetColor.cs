@@ -32,6 +32,8 @@ namespace IroSphere
 
 		public bool IsRandomRead { get; set; }
 
+		private bool IsStaticImageCorner = false;
+
 		private void Awake()
 		{
 			capture = new Texture2D(1, 1, TextureFormat.RGB24, false);
@@ -57,6 +59,9 @@ namespace IroSphere
 			RandomRead();
 
 			Vector2 mousePos = Input.mousePosition;
+
+			Debug.Log(imageCornerBottomLeft);
+			Debug.Log(imageCornerTopRight);
 
 			isInImageRect = (mousePos.x >= imageCornerBottomLeft.x && imageCornerTopRight.x >= mousePos.x &&
 							 mousePos.y >= imageCornerBottomLeft.y && imageCornerTopRight.y >= mousePos.y &&
@@ -156,15 +161,24 @@ namespace IroSphere
 				corners[i] = imageRectTrs.TransformPoint(corners[i]);
 			}
 
-
-			imageCornerBottomLeft = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[0]);
-			imageCornerTopRight = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[2]);
+			if(IsStaticImageCorner)
+			{
+				imageCornerBottomLeft = new Vector2(10,100);
+				imageCornerTopRight = new Vector2(400,500);
+			}else{
+				imageCornerBottomLeft = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[0]);
+				imageCornerTopRight = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[2]);
+			}
 
 			//ウィンドウサイズによっては画面の外をサンプリングしてしまう事がある為、切り取る
 			//Y軸は、画像の拡縮がかかる為、処理しなくても大丈夫
 			if(imageCornerBottomLeft.x < 1)
 				imageCornerBottomLeft.x = 1;
 
+		}
+
+		public void SetIsStaticImageCorner(bool IsStaticImageCorner){
+			this.IsStaticImageCorner = IsStaticImageCorner;
 		}
 	}
 }

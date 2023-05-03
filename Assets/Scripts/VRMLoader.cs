@@ -7,11 +7,15 @@ using System;
 using UniVRM10;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using UnityEngine.UI;
 
 public class VRMLoader : MonoBehaviour
 {
     [SerializeField] Vector3 avatar_pos;
     [SerializeField] Quaternion avatar_rot;
+    [SerializeField] GameObject obj;
+    [SerializeField] GameObject root;
+    [SerializeField] Slider slider;
 
     /// <summary>
     /// javascript側からurl呼ばれる、アップロードされたvrmのurlからvrmをロードするメソッド
@@ -19,15 +23,17 @@ public class VRMLoader : MonoBehaviour
     /// <param name="url">js側で生成されたblobオブジェクトを指すurl</param>
     public async void LoadFromURL(string url){
 
+        ReleaseResources();
         Vrm10Instance instance = await LoadVRM(url);
 
         if(instance == null){
             // null チェック
         }
 
-        var root = instance.gameObject;
-        root.transform.position = avatar_pos;
-        root.transform.rotation = avatar_rot;
+        obj = instance.gameObject;
+        obj.transform.parent = root.transform;
+        obj.transform.localPosition = avatar_pos;
+        obj.transform.localRotation = avatar_rot;
     }
 
     /// <summary>
@@ -45,4 +51,40 @@ public class VRMLoader : MonoBehaviour
         return instance;
     }
 
+    /// <summary>
+    /// ローカルデバッグ用メソッド
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public async void DebugLoadFromPath(string path)
+    {
+        ReleaseResources();
+        Vrm10Instance instance = await Vrm10.LoadPathAsync(path,materialGenerator: new UrpVrm10MaterialDescriptorGenerator());
+
+        if(instance == null){
+            // null チェック
+        }
+
+        obj = instance.gameObject;
+        obj.transform.parent = root.transform;
+        obj.transform.localPosition = avatar_pos;
+        obj.transform.localRotation = avatar_rot;
+
+        //obj.transform.position = avatar_pos;
+        //obj.transform.rotation = avatar_rot;
+    }
+
+    void ReleaseResources()
+	{
+        if(obj != null)
+        {
+            Destroy(obj);
+        }
+    }
+
+
+    public void Update()
+    {
+        root.transform.rotation = Quaternion.Euler(0,slider.value * 360f - 180f, 0);
+    }
 }
