@@ -59,5 +59,20 @@ namespace IroSphere
 				Destroy(sprite);
 			}
 		}
+
+		/// <summary>
+		/// ローカルデバッグ用メソッド
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public void DebugLoadFromPath(string path)
+		{
+			var rawData = System.IO.File.ReadAllBytes(path);
+			Texture2D texture2D = new Texture2D(0, 0);
+			texture2D.LoadImage(rawData);
+			sprite = Sprite.Create(texture2D, new Rect(0f, 0f, texture2D.width, texture2D.height),
+					new Vector2(0.5f, 0.5f), 100f);
+			manager.Picture = sprite;
+		}
 	}
 }
