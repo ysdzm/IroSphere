@@ -8,3 +8,4 @@
 3. `c`キーでクリア
 
 
+![image](https://user-images.githubusercontent.com/69578376/235951900-078f6a1e-e673-41b6-a640-681fe2109dbe.png)
