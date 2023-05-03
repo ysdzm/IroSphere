@@ -163,8 +163,8 @@ namespace IroSphere
 
 			if(IsStaticImageCorner)
 			{
-				imageCornerBottomLeft = new Vector2(10,100);
-				imageCornerTopRight = new Vector2(400,500);
+				imageCornerBottomLeft = new Vector2(Screen.width * 0.05f,Screen.height * 0.17f);
+				imageCornerTopRight = new Vector2(Screen.width * 0.45f, Screen.height * 0.9f);
 			}else{
 				imageCornerBottomLeft = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[0]);
 				imageCornerTopRight = RectTransformUtility.WorldToScreenPoint(Camera.main, corners[2]);

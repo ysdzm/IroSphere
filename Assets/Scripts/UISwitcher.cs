@@ -32,6 +32,6 @@ public class UISwitcher : MonoBehaviour
 
     void Start()
     {
-        Switch("image");
+        Switch("vrm");
     }
 }

@@ -82,6 +82,10 @@ public class VRMLoader : MonoBehaviour
         }
     }
 
+    public void Start() {
+        string sample_path = Application.streamingAssetsPath + "/" + "AvatarSample_A.vrm";
+        DebugLoadFromPath(sample_path);
+    }
 
     public void Update()
     {
